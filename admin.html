@@ -1,0 +1,3411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>PionTok Admin · Premium Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23000'/%3E%3Cpath%20d='M32%2018a14%2014%200%201%200%200%2028%2014%2014%200%200%200%200-28Zm0%206a2%202%200%201%201%200%204%202%202%200%200%201%200-4Zm-2%208h4v10h-4z'%20fill='%23bbea02'/%3E%3C/svg%3E" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #060708;
+      --bg-2: #0a0c0f;
+      --surface: rgba(255,255,255,.025);
+      --surface-2: rgba(255,255,255,.04);
+      --surface-3: rgba(255,255,255,.06);
+      --glass: rgba(20,24,28,.55);
+      --glass-border: rgba(255,255,255,.08);
+      --text: #fff;
+      --text-2: rgba(255,255,255,.62);
+      --text-3: rgba(255,255,255,.4);
+      --border: rgba(255,255,255,.08);
+      --border-2: rgba(255,255,255,.14);
+      --accent: #bbea02;
+      --accent-hover: #a8d402;
+      --accent-soft: rgba(187,234,2,.12);
+      --accent-glow: rgba(187,234,2,.4);
+      --danger: #ff4d6d;
+      --danger-soft: rgba(255,77,109,.12);
+      --warn: #ffb84d;
+      --warn-soft: rgba(255,184,77,.12);
+      --info: #4fc3f7;
+      --info-soft: rgba(79,195,247,.12);
+      --success: #4ade80;
+      --success-soft: rgba(74,222,128,.12);
+      --radius: 14px;
+      --radius-sm: 8px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,.3);
+      --shadow: 0 8px 32px rgba(0,0,0,.45);
+      --shadow-lg: 0 24px 60px rgba(0,0,0,.55);
+      --sidebar-w: 248px;
+      --header-h: 64px;
+      --ease: cubic-bezier(.4,0,.2,1);
+      --ease-out: cubic-bezier(0,0,.2,1);
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.55;
+      font-feature-settings: 'cv02','cv03','cv04','cv11';
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    /* Ambient background — subtle radial gradients (premium feel) */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(187,234,2,.06), transparent 35%),
+        radial-gradient(circle at 88% 78%, rgba(79,195,247,.05), transparent 35%),
+        radial-gradient(circle at 50% 100%, rgba(255,77,109,.04), transparent 40%);
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(187,234,2,.3); }
+
+    /* ============ LOGIN ============ */
+    .login-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 1.5rem;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(187,234,2,.10), transparent 55%),
+        radial-gradient(circle at 30% 80%, rgba(79,195,247,.06), transparent 50%);
+    }
+    .login-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      max-width: 420px; width: 100%;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      position: relative; overflow: hidden;
+      animation: fadeUp .5s var(--ease-out);
+    }
+    .login-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(187,234,2,.08), transparent 50%);
+      pointer-events: none;
+    }
+    .login-logo {
+      display: inline-flex; align-items: center; gap: .55rem;
+      margin-bottom: 1.5rem; position: relative;
+    }
+    .login-logo .logo-mark {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #8ed60a);
+      display: grid; place-items: center; color: #000;
+      box-shadow: 0 8px 24px rgba(187,234,2,.35);
+    }
+    .login-logo .logo-mark svg { width: 20px; height: 20px; }
+    .login-logo .logo-text { font-size: 1.35rem; font-weight: 800; letter-spacing: -.5px; }
+    .login-logo .logo-text span { color: var(--accent); }
+    .login-card h1 { font-size: 1.5rem; margin-bottom: .3rem; letter-spacing: -.5px; position: relative; }
+    .login-card .subtitle { color: var(--text-2); font-size: .9rem; margin-bottom: 2rem; position: relative; }
+    .login-card .field { margin-bottom: 1.1rem; position: relative; }
+    .login-card label { display: block; font-size: .78rem; color: var(--text-2); margin-bottom: .4rem; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .login-card .input-wrap { position: relative; }
+    .login-card .input-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-3); }
+    .login-card input {
+      width: 100%; padding: .85rem 1rem .85rem 2.6rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      color: var(--text); font-size: .95rem; outline: none;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+      font-family: inherit;
+    }
+    .login-card input:focus {
+      border-color: var(--accent);
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 0 0 4px rgba(187,234,2,.1);
+    }
+    .login-card button[type="submit"] {
+      width: 100%; padding: .9rem;
+      border: none; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #8ed60a);
+      color: #000;
+      font-weight: 800; font-size: 1rem; cursor: pointer;
+      transition: transform .15s, box-shadow .2s;
+      font-family: inherit;
+      box-shadow: 0 6px 20px rgba(187,234,2,.3);
+      position: relative;
+    }
+    .login-card button[type="submit"]:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(187,234,2,.45); }
+    .login-card button[type="submit"]:active { transform: translateY(0); }
+    .login-error {
+      color: var(--danger); font-size: .85rem; margin-top: 1rem;
+      display: none; padding: .7rem .9rem;
+      background: var(--danger-soft); border: 1px solid rgba(255,77,109,.25);
+      border-radius: 8px;
+    }
+    .login-hint {
+      margin-top: 1.5rem; padding: .9rem 1rem;
+      background: rgba(255,255,255,.03);
+      border: 1px dashed var(--border-2);
+      border-radius: 10px;
+      font-size: .78rem; color: var(--text-2); position: relative;
+    }
+    .login-hint strong { color: var(--text); display: block; margin-bottom: .3rem; }
+    .login-hint code {
+      color: var(--accent); font-family: var(--mono); font-size: .8rem;
+      background: var(--accent-soft); padding: 2px 6px; border-radius: 4px;
+    }
+
+    /* ============ DASHBOARD SHELL ============ */
+    .dashboard { display: none; }
+    .dashboard.active { display: block; }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+      background: linear-gradient(180deg, rgba(10,12,15,.95), rgba(6,7,8,.95));
+      border-right: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 200;
+      display: flex; flex-direction: column;
+      transition: transform .3s var(--ease);
+    }
+    .sidebar-brand {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .sidebar-brand .logo-mark {
+      width: 32px; height: 32px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), #8ed60a);
+      display: grid; place-items: center; color: #000;
+      box-shadow: 0 4px 12px rgba(187,234,2,.3);
+    }
+    .sidebar-brand .logo-mark svg { width: 18px; height: 18px; }
+    .sidebar-brand .brand-text { font-size: 1.05rem; font-weight: 800; letter-spacing: -.3px; }
+    .sidebar-brand .brand-text span { color: var(--accent); }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: .8rem .65rem; }
+    .sidebar-section { margin-bottom: .9rem; }
+    .sidebar-section-title {
+      font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text-3);
+      padding: .5rem .85rem; margin-top: .5rem;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: .7rem;
+      padding: .6rem .85rem; margin: 2px 0;
+      border-radius: 9px;
+      color: var(--text-2); font-size: .85rem; font-weight: 500;
+      cursor: pointer; transition: all .15s var(--ease);
+      border: 1px solid transparent;
+      text-decoration: none; user-select: none;
+    }
+    .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .nav-item:hover {
+      background: var(--surface-2); color: var(--text);
+      border-color: var(--border);
+    }
+    .nav-item.active {
+      background: linear-gradient(135deg, var(--accent-soft), rgba(187,234,2,.04));
+      color: var(--accent);
+      border-color: rgba(187,234,2,.25);
+      box-shadow: inset 0 0 0 1px rgba(187,234,2,.08);
+    }
+    .nav-item .nav-badge {
+      margin-left: auto; font-size: .68rem; font-weight: 700;
+      padding: 1px 6px; border-radius: 8px;
+      background: var(--accent); color: #000;
+    }
+    .nav-item .nav-badge.warn { background: var(--warn); color: #000; }
+    .nav-item .nav-badge.danger { background: var(--danger); color: #fff; }
+    .sidebar-footer {
+      padding: .8rem 1rem;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .admin-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #4fc3f7);
+      display: grid; place-items: center; color: #000;
+      font-weight: 800; font-size: .85rem;
+      flex-shrink: 0;
+    }
+    .admin-info { flex: 1; min-width: 0; }
+    .admin-info .admin-name { font-size: .82rem; font-weight: 600; }
+    .admin-info .admin-role { font-size: .7rem; color: var(--text-3); }
+    .logout-btn {
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text-2); width: 30px; height: 30px;
+      border-radius: 8px; display: grid; place-items: center;
+      cursor: pointer; transition: all .15s;
+    }
+    .logout-btn:hover { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
+    .logout-btn svg { width: 15px; height: 15px; }
+
+    /* Main area */
+    .main-area {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    /* Topbar */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      height: var(--header-h);
+      background: var(--glass);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0 1.5rem;
+    }
+    .topbar .menu-toggle {
+      display: none;
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text); width: 36px; height: 36px;
+      border-radius: 8px; cursor: pointer;
+      align-items: center; justify-content: center;
+    }
+    .topbar .menu-toggle svg { width: 18px; height: 18px; }
+    .topbar .page-title { font-size: 1.05rem; font-weight: 700; letter-spacing: -.3px; }
+    .topbar .page-title span { color: var(--accent); }
+    .topbar-search {
+      flex: 1; max-width: 420px;
+      position: relative;
+    }
+    .topbar-search input {
+      width: 100%; padding: .55rem .9rem .55rem 2.4rem;
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text); font-size: .85rem; border-radius: 10px;
+      outline: none; font-family: inherit; transition: all .15s;
+    }
+    .topbar-search input::placeholder { color: var(--text-3); }
+    .topbar-search input:focus { border-color: var(--accent); background: var(--surface-3); box-shadow: 0 0 0 3px rgba(187,234,2,.08); }
+    .topbar-search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text-3); }
+    .topbar-actions { display: flex; align-items: center; gap: .55rem; margin-left: auto; }
+    .topbar-stat {
+      display: flex; align-items: center; gap: .45rem;
+      padding: .4rem .75rem;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: .78rem; color: var(--text-2);
+    }
+    .topbar-stat .stat-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse-soft 2s infinite; }
+    .topbar-stat .stat-val { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .icon-btn {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text-2); cursor: pointer;
+      display: grid; place-items: center;
+      transition: all .15s; position: relative;
+    }
+    .icon-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+    .icon-btn svg { width: 17px; height: 17px; }
+    .icon-btn .notif-badge {
+      position: absolute; top: -3px; right: -3px;
+      min-width: 16px; height: 16px; padding: 0 4px;
+      background: var(--danger); color: #fff;
+      border-radius: 8px; font-size: .65rem; font-weight: 700;
+      display: grid; place-items: center;
+      border: 2px solid var(--bg);
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .55rem .95rem;
+      background: linear-gradient(135deg, var(--accent), #8ed60a);
+      color: #000; border: none; border-radius: 10px;
+      font-weight: 700; font-size: .82rem; cursor: pointer;
+      font-family: inherit; transition: transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 14px rgba(187,234,2,.25);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(187,234,2,.4); }
+    .btn-primary svg { width: 15px; height: 15px; }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .35rem;
+      padding: .5rem .85rem;
+      background: var(--surface-2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 10px;
+      font-weight: 600; font-size: .82rem; cursor: pointer;
+      font-family: inherit; transition: all .15s;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+    .btn-ghost svg { width: 15px; height: 15px; }
+    .btn-danger {
+      display: inline-flex; align-items: center; gap: .35rem;
+      padding: .5rem .85rem;
+      background: var(--danger-soft); color: var(--danger);
+      border: 1px solid rgba(255,77,109,.3); border-radius: 10px;
+      font-weight: 600; font-size: .82rem; cursor: pointer;
+      font-family: inherit; transition: all .15s;
+    }
+    .btn-danger:hover { background: rgba(255,77,109,.18); border-color: var(--danger); }
+    .btn-danger svg { width: 15px; height: 15px; }
+
+    /* Page content */
+    .page-content { flex: 1; padding: 1.75rem 1.5rem 3rem; max-width: 1480px; width: 100%; margin: 0 auto; }
+    .page { display: none; animation: fadeIn .35s var(--ease-out); }
+    .page.active { display: block; }
+
+    /* Stat cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.2rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: relative; overflow: hidden;
+      transition: transform .2s var(--ease), border-color .2s, box-shadow .2s;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0; transition: opacity .25s;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(187,234,2,.3);
+      box-shadow: 0 12px 30px rgba(0,0,0,.4), 0 0 0 1px rgba(187,234,2,.08);
+    }
+    .stat-card:hover::before { opacity: 1; }
+    .stat-card .stat-icon {
+      width: 32px; height: 32px; border-radius: 9px;
+      display: grid; place-items: center;
+      background: var(--accent-soft); color: var(--accent);
+      margin-bottom: .65rem;
+    }
+    .stat-card .stat-icon svg { width: 16px; height: 16px; }
+    .stat-card.danger .stat-icon { background: var(--danger-soft); color: var(--danger); }
+    .stat-card.warn .stat-icon { background: var(--warn-soft); color: var(--warn); }
+    .stat-card.info .stat-icon { background: var(--info-soft); color: var(--info); }
+    .stat-card.success .stat-icon { background: var(--success-soft); color: var(--success); }
+    .stat-card .stat-label {
+      font-size: .75rem; font-weight: 600;
+      color: var(--text-2); text-transform: uppercase;
+      letter-spacing: .5px; margin-bottom: .25rem;
+    }
+    .stat-card .stat-value {
+      font-size: 1.7rem; font-weight: 800;
+      color: var(--text); letter-spacing: -.5px;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+    .stat-card .stat-delta {
+      margin-top: .4rem; font-size: .72rem;
+      display: inline-flex; align-items: center; gap: .25rem;
+      color: var(--text-3);
+    }
+    .stat-card .stat-delta.up { color: var(--success); }
+    .stat-card .stat-delta.down { color: var(--danger); }
+    .stat-card .stat-delta svg { width: 12px; height: 12px; }
+    .stat-card .stat-spark {
+      position: absolute; right: 12px; top: 14px;
+      width: 60px; height: 24px; opacity: .7;
+    }
+
+    /* Cards (general) */
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .card-header h3 {
+      font-size: .95rem; font-weight: 700; letter-spacing: -.2px;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .card-header h3 svg { width: 16px; height: 16px; color: var(--accent); }
+    .card-header .card-sub { font-size: .76rem; color: var(--text-2); }
+    .card-body { padding: 1.25rem; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem; }
+    .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1rem; }
+    .mb-1 { margin-bottom: 1rem; }
+    .mb-2 { margin-bottom: 2rem; }
+
+    /* Filters */
+    .filters {
+      display: flex; gap: .6rem; flex-wrap: wrap; align-items: center;
+      margin-bottom: 1rem;
+    }
+    .filters .search-input {
+      flex: 1; min-width: 220px;
+      position: relative;
+    }
+    .filters .search-input svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text-3); }
+    .filters .search-input input {
+      width: 100%; padding: .55rem .9rem .55rem 2.4rem;
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text); font-size: .85rem; border-radius: 10px;
+      outline: none; font-family: inherit;
+    }
+    .filters .search-input input:focus { border-color: var(--accent); }
+    .filters select {
+      padding: .55rem .9rem;
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text); font-size: .85rem; border-radius: 10px;
+      outline: none; font-family: inherit; cursor: pointer;
+    }
+    .filters select:focus { border-color: var(--accent); }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; }
+    table.data-table {
+      width: 100%; border-collapse: collapse;
+      font-size: .85rem;
+    }
+    table.data-table thead { position: sticky; top: 0; background: rgba(20,24,28,.9); backdrop-filter: blur(8px); z-index: 5; }
+    table.data-table th, table.data-table td {
+      padding: .85rem 1rem; text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    table.data-table th {
+      font-weight: 700; text-transform: uppercase;
+      font-size: .7rem; letter-spacing: .6px;
+      color: var(--text-2); cursor: pointer;
+      user-select: none; white-space: nowrap;
+      transition: color .15s;
+    }
+    table.data-table th:hover { color: var(--accent); }
+    table.data-table th .sort-ind { display: inline-block; margin-left: 4px; opacity: .4; }
+    table.data-table th.sorted .sort-ind { opacity: 1; color: var(--accent); }
+    table.data-table tbody tr {
+      transition: background .15s;
+      cursor: pointer;
+    }
+    table.data-table tbody tr:hover { background: rgba(187,234,2,.04); }
+    table.data-table tbody tr:last-child td { border-bottom: none; }
+    .url-cell { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-2); }
+    .time-cell { color: var(--text-2); font-size: .78rem; white-space: nowrap; }
+    .mono { font-family: var(--mono); font-size: .78rem; }
+    .empty-row td {
+      text-align: center; padding: 3rem 1rem;
+      color: var(--text-3);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex; align-items: center; gap: .25rem;
+      padding: .22rem .55rem; border-radius: 6px;
+      font-size: .7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .3px;
+    }
+    .badge-platform { background: var(--accent-soft); color: var(--accent); }
+    .badge-device { background: rgba(255,255,255,.06); color: var(--text-2); }
+    .badge-type { background: var(--info-soft); color: var(--info); }
+    .badge-success { background: var(--success-soft); color: var(--success); }
+    .badge-danger { background: var(--danger-soft); color: var(--danger); }
+    .badge-warn { background: var(--warn-soft); color: var(--warn); }
+
+    /* Avatar in tables */
+    .row-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      object-fit: cover; vertical-align: middle;
+      margin-right: 8px;
+      border: 1px solid var(--border);
+    }
+    .row-avatar-placeholder {
+      display: inline-grid; place-items: center;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--accent-soft); color: var(--accent);
+      font-size: .7rem; font-weight: 700;
+      vertical-align: middle; margin-right: 8px;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex; gap: .35rem; align-items: center;
+      justify-content: space-between; padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border);
+      font-size: .8rem; color: var(--text-2);
+      flex-wrap: wrap;
+    }
+    .pagination .pages { display: flex; gap: .25rem; }
+    .pagination button {
+      min-width: 32px; height: 32px; padding: 0 .55rem;
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text); border-radius: 8px; cursor: pointer;
+      font-size: .8rem; font-family: inherit;
+      transition: all .15s;
+    }
+    .pagination button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .pagination button.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    .pagination button:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Toast */
+    .toast-stack {
+      position: fixed; top: 80px; right: 1rem; z-index: 500;
+      display: flex; flex-direction: column; gap: .55rem;
+      max-width: 360px; width: calc(100% - 2rem);
+    }
+    .toast {
+      display: flex; align-items: center; gap: .65rem;
+      padding: .85rem 1rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+      animation: slideInRight .3s var(--ease-out);
+      font-size: .85rem;
+    }
+    .toast.success { border-left-color: var(--success); }
+    .toast.error { border-left-color: var(--danger); }
+    .toast.info { border-left-color: var(--info); }
+    .toast.warn { border-left-color: var(--warn); }
+    .toast.removing { animation: slideOutRight .25s var(--ease) forwards; }
+    .toast svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .toast.success svg { color: var(--success); }
+    .toast.error svg { color: var(--danger); }
+    .toast.info svg { color: var(--info); }
+    .toast.warn svg { color: var(--warn); }
+    .toast .toast-msg { flex: 1; }
+    .toast .toast-close {
+      background: none; border: none; color: var(--text-3);
+      cursor: pointer; padding: 0; font-size: 1.1rem; line-height: 1;
+    }
+
+    /* Drawer (user details) */
+    .drawer-backdrop {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s var(--ease);
+    }
+    .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 310;
+      width: 460px; max-width: 95vw;
+      background: var(--bg-2);
+      border-left: 1px solid var(--border);
+      box-shadow: -20px 0 60px rgba(0,0,0,.5);
+      transform: translateX(100%);
+      transition: transform .3s var(--ease);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: .9rem;
+    }
+    .drawer-header .drawer-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #4fc3f7);
+      display: grid; place-items: center; color: #000;
+      font-weight: 800; font-size: 1.1rem;
+    }
+    .drawer-header .drawer-title { flex: 1; min-width: 0; }
+    .drawer-header .drawer-title h3 { font-size: 1rem; font-weight: 700; }
+    .drawer-header .drawer-title .sub { font-size: .76rem; color: var(--text-2); font-family: var(--mono); word-break: break-all; }
+    .drawer-close {
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text-2); width: 32px; height: 32px;
+      border-radius: 8px; cursor: pointer;
+      display: grid; place-items: center;
+    }
+    .drawer-close:hover { color: var(--danger); border-color: var(--danger); }
+    .drawer-close svg { width: 16px; height: 16px; }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem; }
+    .drawer-section { margin-bottom: 1.5rem; }
+    .drawer-section h4 {
+      font-size: .72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--text-3);
+      margin-bottom: .75rem;
+    }
+    .drawer-meta {
+      display: grid; grid-template-columns: 1fr 1fr; gap: .65rem;
+    }
+    .drawer-meta-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: .7rem .85rem;
+    }
+    .drawer-meta-item .label {
+      font-size: .68rem; color: var(--text-3);
+      text-transform: uppercase; letter-spacing: .4px;
+      margin-bottom: .2rem;
+    }
+    .drawer-meta-item .value {
+      font-size: .85rem; font-weight: 600; color: var(--text);
+      word-break: break-all;
+    }
+    .timeline { position: relative; padding-left: 1.5rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px;
+      width: 2px; background: var(--border);
+    }
+    .timeline-item { position: relative; margin-bottom: 1rem; }
+    .timeline-item::before {
+      content: ''; position: absolute; left: -1.5rem; top: 4px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent); border: 2px solid var(--bg-2);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+    }
+    .timeline-item .tl-title { font-size: .85rem; font-weight: 600; }
+    .timeline-item .tl-time { font-size: .72rem; color: var(--text-3); }
+
+    /* Live activity feed */
+    .activity-feed { max-height: 420px; overflow-y: auto; padding: .5rem 0; }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: .7rem;
+      padding: .65rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+      animation: slideInLeft .25s var(--ease-out);
+    }
+    .activity-item:hover { background: rgba(255,255,255,.02); }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: grid; place-items: center;
+      background: var(--accent-soft); color: var(--accent);
+      flex-shrink: 0;
+    }
+    .activity-icon svg { width: 14px; height: 14px; }
+    .activity-icon.danger { background: var(--danger-soft); color: var(--danger); }
+    .activity-icon.success { background: var(--success-soft); color: var(--success); }
+    .activity-icon.info { background: var(--info-soft); color: var(--info); }
+    .activity-icon.warn { background: var(--warn-soft); color: var(--warn); }
+    .activity-text { flex: 1; min-width: 0; }
+    .activity-text .at-title { font-size: .82rem; color: var(--text); }
+    .activity-text .at-meta { font-size: .72rem; color: var(--text-3); margin-top: 1px; }
+
+    /* Bar chart (CSS-based) */
+    .bar-chart { display: flex; flex-direction: column; gap: .55rem; padding: .25rem 0; }
+    .bar-row { display: flex; align-items: center; gap: .65rem; }
+    .bar-row .bar-label { width: 100px; font-size: .78rem; color: var(--text-2); flex-shrink: 0; }
+    .bar-row .bar-track { flex: 1; height: 22px; background: var(--surface-2); border-radius: 6px; overflow: hidden; position: relative; }
+    .bar-row .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #8ed60a);
+      border-radius: 6px;
+      transition: width .8s var(--ease-out);
+      box-shadow: 0 0 12px rgba(187,234,2,.4);
+    }
+    .bar-row .bar-value { width: 50px; text-align: right; font-size: .78rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+
+    /* Line chart (SVG) */
+    .line-chart-wrap { width: 100%; }
+    .line-chart-wrap svg { width: 100%; height: auto; display: block; }
+
+    /* Donut chart */
+    .donut-wrap { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .donut-wrap svg { width: 160px; height: 160px; }
+    .donut-legend { display: flex; flex-direction: column; gap: .4rem; flex: 1; min-width: 180px; }
+    .donut-legend-item { display: flex; align-items: center; gap: .5rem; font-size: .82rem; }
+    .donut-legend-item .lg-dot { width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0; }
+    .donut-legend-item .lg-label { color: var(--text-2); flex: 1; }
+    .donut-legend-item .lg-val { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+
+    /* Heatmap */
+    .heatmap { display: grid; grid-template-columns: 28px repeat(24, 1fr); gap: 2px; font-size: .65rem; }
+    .heatmap .hm-label { color: var(--text-3); align-self: center; }
+    .heatmap .hm-cell {
+      aspect-ratio: 1; border-radius: 3px;
+      background: rgba(255,255,255,.04);
+      transition: transform .15s;
+      cursor: pointer;
+    }
+    .heatmap .hm-cell:hover { transform: scale(1.3); z-index: 1; }
+    .hm-legend { display: flex; align-items: center; gap: .4rem; font-size: .7rem; color: var(--text-3); margin-top: .5rem; }
+    .hm-legend .hm-swatches { display: flex; gap: 2px; }
+    .hm-legend .hm-sw { width: 14px; height: 14px; border-radius: 3px; }
+
+    /* World map (simplified — colored blocks per region) */
+    .world-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+    .world-cell {
+      aspect-ratio: 1.4; border-radius: 6px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+      font-size: .68rem; font-weight: 700; color: var(--text-3);
+      transition: all .2s; cursor: pointer;
+    }
+    .world-cell.has-data { background: var(--accent-soft); color: var(--accent); border-color: rgba(187,234,2,.3); }
+    .world-cell.heat-1 { background: rgba(187,234,2,.15); }
+    .world-cell.heat-2 { background: rgba(187,234,2,.3); }
+    .world-cell.heat-3 { background: rgba(187,234,2,.5); }
+    .world-cell.heat-4 { background: rgba(187,234,2,.75); color: #000; }
+    .world-cell:hover { transform: scale(1.08); border-color: var(--accent); }
+
+    /* AI Insight cards */
+    .insight-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      backdrop-filter: blur(12px);
+      display: flex; align-items: flex-start; gap: .8rem;
+      transition: all .2s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .insight-card::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+      background: var(--accent);
+    }
+    .insight-card.warn::before { background: var(--warn); }
+    .insight-card.danger::before { background: var(--danger); }
+    .insight-card.success::before { background: var(--success); }
+    .insight-card:hover { transform: translateY(-2px); border-color: var(--border-2); }
+    .insight-card .insight-icon {
+      width: 32px; height: 32px; border-radius: 9px;
+      display: grid; place-items: center;
+      background: var(--accent-soft); color: var(--accent);
+      flex-shrink: 0;
+    }
+    .insight-card.warn .insight-icon { background: var(--warn-soft); color: var(--warn); }
+    .insight-card.danger .insight-icon { background: var(--danger-soft); color: var(--danger); }
+    .insight-card.success .insight-icon { background: var(--success-soft); color: var(--success); }
+    .insight-card .insight-icon svg { width: 16px; height: 16px; }
+    .insight-card .insight-title { font-size: .85rem; font-weight: 700; margin-bottom: .15rem; }
+    .insight-card .insight-desc { font-size: .78rem; color: var(--text-2); line-height: 1.4; }
+
+    /* Skeleton loaders */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface) 0%, var(--surface-3) 50%, var(--surface) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 6px;
+    }
+    .skeleton-line { height: 14px; margin-bottom: .5rem; }
+    .skeleton-line.short { width: 60%; }
+    .skeleton-line.med { width: 80%; }
+    .skeleton-card { padding: 1.1rem; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); }
+
+    /* Empty state */
+    .empty-state {
+      padding: 3rem 1.5rem; text-align: center;
+    }
+    .empty-state .es-icon {
+      width: 72px; height: 72px; margin: 0 auto 1rem;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      display: grid; place-items: center;
+      color: var(--accent);
+    }
+    .empty-state .es-icon svg { width: 32px; height: 32px; }
+    .empty-state h4 { font-size: 1rem; font-weight: 700; margin-bottom: .35rem; }
+    .empty-state p { color: var(--text-2); font-size: .85rem; max-width: 380px; margin: 0 auto 1.25rem; }
+
+    /* Notification dropdown */
+    .notif-panel {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      width: 360px; max-width: calc(100vw - 2rem);
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 250; display: none;
+      overflow: hidden;
+    }
+    .notif-panel.open { display: block; animation: fadeUp .2s var(--ease-out); }
+    .notif-panel .np-header {
+      padding: .85rem 1rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .notif-panel .np-header h4 { font-size: .9rem; font-weight: 700; }
+    .notif-panel .np-list { max-height: 360px; overflow-y: auto; }
+    .notif-panel .np-item {
+      padding: .75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: .65rem; align-items: flex-start;
+      transition: background .15s; cursor: pointer;
+    }
+    .notif-panel .np-item:hover { background: rgba(255,255,255,.03); }
+    .notif-panel .np-item .np-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: grid; place-items: center;
+      background: var(--accent-soft); color: var(--accent);
+      flex-shrink: 0;
+    }
+    .notif-panel .np-item .np-icon svg { width: 14px; height: 14px; }
+    .notif-panel .np-item.danger .np-icon { background: var(--danger-soft); color: var(--danger); }
+    .notif-panel .np-item.warn .np-icon { background: var(--warn-soft); color: var(--warn); }
+    .notif-panel .np-item.success .np-icon { background: var(--success-soft); color: var(--success); }
+    .notif-panel .np-item .np-text { flex: 1; }
+    .notif-panel .np-item .np-title { font-size: .82rem; font-weight: 600; }
+    .notif-panel .np-item .np-time { font-size: .7rem; color: var(--text-3); margin-top: 1px; }
+
+    /* Settings */
+    .settings-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row .sr-info { flex: 1; min-width: 220px; }
+    .settings-row .sr-title { font-size: .88rem; font-weight: 600; }
+    .settings-row .sr-desc { font-size: .76rem; color: var(--text-2); margin-top: 2px; }
+    .toggle {
+      width: 44px; height: 24px; border-radius: 12px;
+      background: var(--surface-3); border: 1px solid var(--border);
+      cursor: pointer; position: relative; transition: background .2s;
+      flex-shrink: 0;
+    }
+    .toggle::after {
+      content: ''; position: absolute; top: 2px; left: 2px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--text-2); transition: all .2s var(--ease);
+    }
+    .toggle.on { background: var(--accent); border-color: var(--accent); }
+    .toggle.on::after { left: 22px; background: #000; }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slideOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(20px); } }
+    @keyframes slideInLeft { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.1);
+      border-top-color: var(--accent);
+      border-radius: 50%; animation: spin .7s linear infinite;
+    }
+
+    /* Mobile responsive */
+    .mobile-overlay {
+      position: fixed; inset: 0; z-index: 199;
+      background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+      display: none;
+    }
+    .mobile-overlay.open { display: block; }
+    @media (max-width: 1024px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .grid-2-1, .grid-1-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      :root { --sidebar-w: 260px; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-area { margin-left: 0; }
+      .topbar { padding: 0 1rem; gap: .55rem; }
+      .topbar .menu-toggle { display: inline-grid; }
+      .topbar-search { display: none; }
+      .topbar-stat { display: none; }
+      .page-content { padding: 1.25rem 1rem 3rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: .65rem; }
+      .stat-card { padding: .9rem 1rem; }
+      .stat-card .stat-value { font-size: 1.3rem; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .drawer { width: 100%; }
+      .toast-stack { top: 70px; right: .5rem; left: .5rem; max-width: none; }
+      .topbar .page-title { font-size: .95rem; }
+      table.data-table th, table.data-table td { padding: .65rem .55rem; font-size: .78rem; }
+      .url-cell { max-width: 120px; }
+      .heatmap { grid-template-columns: 24px repeat(24, 1fr); font-size: .55rem; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .login-card { padding: 1.75rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7L2 14l10 5 10-5-10-5z"/></svg>
+      </span>
+      <span class="logo-text">Pion<span>Tok</span></span>
+    </div>
+    <h1>Admin Console</h1>
+    <p class="subtitle">Sign in to access the premium analytics dashboard</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="adminEmail">Email</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" id="adminEmail" required placeholder="admin@piontok.app" autocomplete="email" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="adminPassword">Password</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="adminPassword" required placeholder="••••••••" autocomplete="current-password" />
+        </div>
+      </div>
+      <button type="submit">Sign In</button>
+      <p class="login-error" id="loginError">Invalid email or password.</p>
+    </form>
+    <div class="login-hint">
+      <strong>Demo credentials</strong>
+      Email: <code>admin@piontok.app</code><br>
+      Password: <code>admin123</code>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div class="dashboard" id="dashboard">
+
+  <!-- Mobile overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7L2 14l10 5 10-5-10-5z"/></svg>
+      </span>
+      <span class="brand-text">Pion<span>Tok</span></span>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Main</div>
+        <a class="nav-item active" data-page="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Overview
+        </a>
+        <a class="nav-item" data-page="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" data-page="users">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Users
+          <span class="nav-badge" id="navBadgeUsers">0</span>
+        </a>
+        <a class="nav-item" data-page="downloads">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Downloads
+        </a>
+        <a class="nav-item" data-page="sessions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Sessions
+        </a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Insights</div>
+        <a class="nav-item" data-page="analytics">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Analytics
+        </a>
+        <a class="nav-item" data-page="revenue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Revenue
+        </a>
+        <a class="nav-item" data-page="ads">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M8 5v5"/></svg>
+          Ads
+        </a>
+        <a class="nav-item" data-page="countries">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Countries
+        </a>
+        <a class="nav-item" data-page="errors">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Errors
+          <span class="nav-badge danger" id="navBadgeErrors" style="display:none;">0</span>
+        </a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">System</div>
+        <a class="nav-item" data-page="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </a>
+        <a class="nav-item" data-page="logs">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Logs
+        </a>
+        <a class="nav-item" data-page="backups">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Backups
+        </a>
+        <a class="nav-item" data-page="admin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Admin
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-avatar">A</div>
+      <div class="admin-info">
+        <div class="admin-name">Admin</div>
+        <div class="admin-role">Super Admin</div>
+      </div>
+      <button class="logout-btn" id="logoutBtn" title="Logout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Area -->
+  <div class="main-area">
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="page-title" id="topbarTitle">Pion<span>Tok</span> Admin</div>
+      <div class="topbar-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="globalSearch" placeholder="Search users, links, sessions, errors..." />
+      </div>
+      <div class="topbar-actions">
+        <div class="topbar-stat" title="Connection status">
+          <span class="stat-dot"></span>
+          <span class="stat-val" id="topbarTime">--:--</span>
+        </div>
+        <div class="topbar-stat" title="Today's date">
+          <span class="stat-val" id="topbarDate">—</span>
+        </div>
+        <div style="position:relative;">
+          <button class="icon-btn" id="notifBtn" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+          </button>
+          <div class="notif-panel" id="notifPanel">
+            <div class="np-header">
+              <h4>Notifications</h4>
+              <button class="btn-ghost" id="clearNotifBtn" style="padding:.3rem .55rem;font-size:.72rem;">Clear all</button>
+            </div>
+            <div class="np-list" id="notifList"></div>
+          </div>
+        </div>
+        <button class="icon-btn" id="refreshBtn" title="Refresh data" aria-label="Refresh">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+        <button class="btn-primary" id="exportBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content" id="pageContent">
+
+      <!-- ===== OVERVIEW PAGE ===== -->
+      <section class="page active" id="page-overview">
+        <div class="stats-grid" id="overviewStats"></div>
+        <div class="grid-2-1">
+          <div class="card mb-1">
+            <div class="card-header">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Downloads & Activity (Last 14 Days)</h3>
+              <span class="card-sub">Daily download volume</span>
+            </div>
+            <div class="card-body" id="overviewChart"></div>
+          </div>
+          <div class="card mb-1">
+            <div class="card-header">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Live Activity</h3>
+            </div>
+            <div class="activity-feed" id="liveActivity"></div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header"><h3>Platform Distribution</h3></div>
+            <div class="card-body" id="platformDonut"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Device Distribution</h3></div>
+            <div class="card-body" id="deviceDonut"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Top Countries</h3></div>
+            <div class="card-body" id="topCountriesBar"></div>
+          </div>
+        </div>
+        <div class="card mt-2">
+          <div class="card-header">
+            <h3>AI Insights</h3>
+            <span class="card-sub">Auto-generated from recent activity</span>
+          </div>
+          <div class="card-body" id="aiInsights"></div>
+        </div>
+      </section>
+
+      <!-- ===== DASHBOARD PAGE (alias / extra) ===== -->
+      <section class="page" id="page-dashboard">
+        <div class="stats-grid" id="dashboardStats"></div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Downloads per Hour (Today)</h3></div>
+            <div class="card-body" id="hourlyChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Sessions Graph (Last 7 Days)</h3></div>
+            <div class="card-body" id="sessionsChart"></div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Browser Distribution</h3></div>
+            <div class="card-body" id="browserDonut"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Operating Systems</h3></div>
+            <div class="card-body" id="osDonut"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Weekly Growth</h3></div>
+          <div class="card-body" id="weeklyGrowthChart"></div>
+        </div>
+      </section>
+
+      <!-- ===== USERS PAGE ===== -->
+      <section class="page" id="page-users">
+        <div class="stats-grid" id="userStats"></div>
+        <div class="card">
+          <div class="card-header">
+            <h3>All Users</h3>
+            <span class="card-sub" id="usersCount">0 users</span>
+          </div>
+          <div style="padding:1rem 1.25rem; border-bottom:1px solid var(--border);">
+            <div class="filters" style="margin-bottom:0;">
+              <div class="search-input">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="userSearch" placeholder="Search by fingerprint, device, OS, browser..." />
+              </div>
+              <select id="userStatusFilter">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="blocked">Blocked</option>
+              </select>
+              <select id="userDeviceFilter">
+                <option value="">All Devices</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Desktop">Desktop</option>
+              </select>
+              <button class="btn-ghost" id="exportUsersBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="usersTable">
+              <thead><tr>
+                <th data-sort="idx">#</th>
+                <th data-sort="fpId">Fingerprint ID</th>
+                <th data-sort="firstSeen">First Seen</th>
+                <th data-sort="lastSeen">Last Seen</th>
+                <th data-sort="deviceType">Device</th>
+                <th data-sort="os">OS</th>
+                <th data-sort="browser">Browser</th>
+                <th data-sort="status">Status</th>
+                <th>Action</th>
+              </tr></thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="usersPagination"></div>
+        </div>
+      </section>
+
+      <!-- ===== DOWNLOADS PAGE ===== -->
+      <section class="page" id="page-downloads">
+        <div class="stats-grid" id="downloadsStats"></div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Downloads per Day (Last 14 Days)</h3></div>
+            <div class="card-body" id="downloadsPerDayChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Downloads per Hour</h3></div>
+            <div class="card-body" id="downloadsPerHourChart"></div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header"><h3>Top Platforms</h3></div>
+            <div class="card-body" id="topPlatformsBar"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Top Devices</h3></div>
+            <div class="card-body" id="topDevicesBar"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Top Countries</h3></div>
+            <div class="card-body" id="topDownloadCountriesBar"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Downloads</h3>
+            <button class="btn-ghost" id="exportDownloadsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Timestamp</th><th>Platform</th><th>URL</th><th>Device</th><th>OS</th><th>Country</th><th>Status</th></tr></thead>
+              <tbody id="downloadsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SESSIONS PAGE ===== -->
+      <section class="page" id="page-sessions">
+        <div class="stats-grid" id="sessionStats"></div>
+        <div class="grid-2-1">
+          <div class="card">
+            <div class="card-header"><h3>Session Timeline (Last 14 Days)</h3></div>
+            <div class="card-body" id="sessionTimelineChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Hourly Usage Heatmap</h3></div>
+            <div class="card-body" id="sessionHeatmap"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>All Sessions</h3>
+            <span class="card-sub" id="sessionsCount">0 sessions</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Timestamp</th><th>Type</th><th>Time Spent</th><th>Active Time</th><th>Ads Seen</th><th>Device</th><th>OS</th><th>Country</th></tr></thead>
+              <tbody id="sessionsTableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="sessionsPagination"></div>
+        </div>
+      </section>
+
+      <!-- ===== ANALYTICS PAGE ===== -->
+      <section class="page" id="page-analytics">
+        <div class="stats-grid" id="analyticsStats"></div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Daily Active Users (Last 14 Days)</h3></div>
+            <div class="card-body" id="dauChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Monthly Active Users</h3></div>
+            <div class="card-body" id="mauChart"></div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header"><h3>Retention</h3></div>
+            <div class="card-body" id="retentionChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>User Growth</h3></div>
+            <div class="card-body" id="userGrowthChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Revenue Growth</h3></div>
+            <div class="card-body" id="revenueGrowthChart"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== REVENUE PAGE ===== -->
+      <section class="page" id="page-revenue">
+        <div class="stats-grid" id="revenueStats"></div>
+        <div class="card mb-1">
+          <div class="card-header"><h3>Revenue Trend (Last 14 Days)</h3></div>
+          <div class="card-body" id="revenueChart"></div>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header"><h3>RPM / CPM</h3></div>
+            <div class="card-body" id="rpmCpmChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>CTR & Fill Rate</h3></div>
+            <div class="card-body" id="ctrChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Top Performing Ads</h3></div>
+            <div class="card-body" id="topAdsBar"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Revenue Breakdown</h3></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Source</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Revenue</th><th>RPM</th></tr></thead>
+              <tbody id="revenueBreakdownBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ADS PAGE ===== -->
+      <section class="page" id="page-ads">
+        <div class="stats-grid" id="adStats"></div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Ad Impressions Trend</h3></div>
+            <div class="card-body" id="adTrendChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Performance by Placement</h3></div>
+            <div class="card-body" id="adPlacementsBar"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Ad Impressions Log</h3>
+            <span class="card-sub" id="adsCount">0 impressions</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Timestamp</th><th>Ad Location</th><th>Device</th><th>OS</th><th>Browser</th><th>Country</th></tr></thead>
+              <tbody id="adsTableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="adsPagination"></div>
+        </div>
+      </section>
+
+      <!-- ===== COUNTRIES PAGE ===== -->
+      <section class="page" id="page-countries">
+        <div class="stats-grid" id="countryStats"></div>
+        <div class="card mb-1">
+          <div class="card-header"><h3>World Map — Visitor Density</h3><span class="card-sub">Click a region for details</span></div>
+          <div class="card-body" id="worldMap"></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Top Countries by Visitors</h3></div>
+            <div class="card-body" id="topVisitorsCountriesBar"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Top Countries by Downloads</h3></div>
+            <div class="card-body" id="topDlCountriesBar"></div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Top Cities</h3></div>
+            <div class="card-body" id="topCitiesBar"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Revenue by Country</h3></div>
+            <div class="card-body" id="revenueByCountryBar"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ERRORS PAGE ===== -->
+      <section class="page" id="page-errors">
+        <div class="stats-grid" id="errorStats"></div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Errors per Day</h3></div>
+            <div class="card-body" id="errorsPerDayChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Error Type Distribution</h3></div>
+            <div class="card-body" id="errorTypeDonut"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Error Log</h3>
+            <div style="display:flex;gap:.5rem;">
+              <select id="errorTypeFilter" style="padding:.45rem .7rem;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:.78rem;border-radius:8px;">
+                <option value="">All Error Types</option>
+                <option value="INVALID_URL">Invalid URL</option>
+                <option value="API_FAIL">API Failure</option>
+                <option value="RATE_LIMITED">Rate Limited</option>
+                <option value="TIMEOUT">Timeout</option>
+                <option value="HTTP_404">HTTP 404</option>
+                <option value="TIKTOK_SHORT_UNRESOLVED">Short URL Unresolved</option>
+                <option value="DOWNLOAD_FALLBACK">Download Fallback</option>
+              </select>
+              <button class="btn-ghost" id="exportErrorsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Timestamp</th><th>Error Type</th><th>Details</th><th>Device</th><th>OS</th><th>Country</th></tr></thead>
+              <tbody id="errorsTableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="errorsPagination"></div>
+        </div>
+      </section>
+
+      <!-- ===== SETTINGS PAGE ===== -->
+      <section class="page" id="page-settings">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Admin Profile</h3></div>
+            <div style="padding:.5rem 0;">
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Admin Email</div><div class="sr-desc">Used to sign in to the dashboard</div></div>
+                <code class="mono" style="color:var(--accent);background:var(--accent-soft);padding:.3rem .55rem;border-radius:6px;">admin@piontok.app</code>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Change Password</div><div class="sr-desc">Update your admin password</div></div>
+                <button class="btn-ghost" id="changePassBtn">Change</button>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Two-Factor Authentication</div><div class="sr-desc">Add an extra layer of security</div></div>
+                <div class="toggle" data-setting="2fa"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Session Expiration</div><div class="sr-desc">Auto-logout after inactivity</div></div>
+                <select id="sessionExpSelect" style="padding:.45rem .7rem;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:.78rem;border-radius:8px;">
+                  <option value="30">30 minutes</option>
+                  <option value="60" selected>1 hour</option>
+                  <option value="240">4 hours</option>
+                  <option value="0">Never</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Display</h3></div>
+            <div style="padding:.5rem 0;">
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Compact Mode</div><div class="sr-desc">Tighter spacing for power users</div></div>
+                <div class="toggle" data-setting="compact"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Animations</div><div class="sr-desc">Smooth transitions and effects</div></div>
+                <div class="toggle on" data-setting="animations"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Live Refresh</div><div class="sr-desc">Auto-refresh dashboard every 30s</div></div>
+                <div class="toggle on" data-setting="liveRefresh"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Show Sparklines</div><div class="sr-desc">Mini trend charts on stat cards</div></div>
+                <div class="toggle on" data-setting="sparklines"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Ad Settings</h3></div>
+            <div style="padding:.5rem 0;">
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Show Ads on Site</div><div class="sr-desc">Toggle ad placeholders on the public site</div></div>
+                <div class="toggle on" data-setting="adsEnabled"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Estimated CPM</div><div class="sr-desc">Used for revenue calculations</div></div>
+                <input type="number" id="cpmInput" value="2.50" step="0.10" style="width:90px;padding:.45rem .6rem;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:.78rem;border-radius:8px;" />
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Estimated CTR</div><div class="sr-desc">Click-through rate assumption</div></div>
+                <input type="number" id="ctrInput" value="1.5" step="0.1" style="width:90px;padding:.45rem .6rem;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:.78rem;border-radius:8px;" />
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Maintenance</h3></div>
+            <div style="padding:.5rem 0;">
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Maintenance Mode</div><div class="sr-desc">Show "Be right back" page to visitors</div></div>
+                <div class="toggle" data-setting="maintenance"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Block New Signups</div><div class="sr-desc">Disable new fingerprint tracking</div></div>
+                <div class="toggle" data-setting="blockSignups"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Force HTTPS</div><div class="sr-desc">Redirect HTTP to HTTPS</div></div>
+                <div class="toggle on" data-setting="forceHttps"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Clear All Analytics</div><div class="sr-desc">Permanently delete all tracked data</div></div>
+                <button class="btn-danger" id="clearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Clear All</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Save Settings</h3></div>
+          <div style="padding:1.25rem;">
+            <button class="btn-primary" id="saveSettingsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save Settings</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== LOGS PAGE ===== -->
+      <section class="page" id="page-logs">
+        <div class="card mb-1">
+          <div class="card-header">
+            <h3>Activity Logs</h3>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <select id="logTypeFilter" style="padding:.45rem .7rem;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:.78rem;border-radius:8px;">
+                <option value="">All Logs</option>
+                <option value="activity">Activity</option>
+                <option value="admin">Admin</option>
+                <option value="login">Login</option>
+                <option value="security">Security</option>
+              </select>
+              <button class="btn-ghost" id="exportLogsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Logs</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Timestamp</th><th>Type</th><th>Action</th><th>Details</th></tr></thead>
+              <tbody id="logsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BACKUPS PAGE ===== -->
+      <section class="page" id="page-backups">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header"><h3>Export Data</h3></div>
+            <div style="padding:1.25rem; display:flex; flex-direction:column; gap:.65rem;">
+              <button class="btn-primary" id="backupJsonBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export JSON</button>
+              <button class="btn-ghost" id="backupCsvBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
+              <button class="btn-ghost" id="backupExcelBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Excel (HTML)</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Restore Backup</h3></div>
+            <div style="padding:1.25rem; display:flex; flex-direction:column; gap:.65rem;">
+              <input type="file" id="restoreFile" accept=".json" style="font-size:.78rem;color:var(--text-2);" />
+              <button class="btn-primary" id="restoreBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Restore Backup</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Auto Backup</h3></div>
+            <div style="padding:.5rem 0;">
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Daily Auto Backup</div><div class="sr-desc">Auto-export to localStorage daily</div></div>
+                <div class="toggle on" data-setting="autoBackup"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Last Backup</div><div class="sr-desc" id="lastBackupTime">Never</div></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Create Snapshot Now</div><div class="sr-desc">Save current state as a named backup</div></div>
+                <button class="btn-ghost" id="createSnapshotBtn">Create</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Saved Backups</h3></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Snapshot ID</th><th>Created</th><th>Events</th><th>Size</th><th>Actions</th></tr></thead>
+              <tbody id="backupsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ADMIN PAGE ===== -->
+      <section class="page" id="page-admin">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Admin Users</h3></div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Email</th><th>Role</th><th>Last Active</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>admin@piontok.app</td><td><span class="badge badge-success">Super Admin</span></td><td class="time-cell">Just now</td><td><span class="badge badge-success">Active</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Security</h3></div>
+            <div style="padding:.5rem 0;">
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Logout Everywhere</div><div class="sr-desc">Revoke all admin sessions</div></div>
+                <button class="btn-danger" id="logoutAllBtn">Logout All</button>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Activity Logging</div><div class="sr-desc">Log admin actions to security log</div></div>
+                <div class="toggle on" data-setting="activityLog"></div>
+              </div>
+              <div class="settings-row">
+                <div class="sr-info"><div class="sr-title">Failed Login Lockout</div><div class="sr-desc">Block after 5 failed attempts</div></div>
+                <div class="toggle on" data-setting="lockout"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============ TOAST STACK ============ -->
+<div class="toast-stack" id="toastStack"></div>
+
+<!-- ============ USER DRAWER ============ -->
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<aside class="drawer" id="userDrawer">
+  <div class="drawer-header">
+    <div class="drawer-avatar" id="drawerAvatar">?</div>
+    <div class="drawer-title">
+      <h3 id="drawerTitle">User</h3>
+      <div class="sub" id="drawerSub">—</div>
+    </div>
+    <button class="drawer-close" id="drawerClose" aria-label="Close drawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<!-- ============ SVG ICON DEFS ============ -->
+<svg style="display:none;">
+  <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" stroke-width="2"/><line x1="12" y1="8" x2="12.01" y2="8" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-arrow-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="7 10 12 15 17 10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="12 6 12 12 16 14" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="currentColor"/></symbol>
+  <symbol id="i-trending-up" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="17 6 23 6 23 12" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-trending-down" viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="17 18 23 18 23 12" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-dollar" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3.13a4 4 0 0 1 0 7.75" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-activity" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="6" y1="6" x2="6.01" y2="6" stroke="currentColor" stroke-width="2"/><line x1="6" y1="18" x2="6.01" y2="18" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="currentColor"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="2 17 12 22 22 17" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="2 12 12 17 22 12" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="19" r="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="2"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13.73 21a2 2 0 0 1-3.46 0" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="1 20 1 14 7 14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-export" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="7 10 12 15 17 10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-chrome" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><line x1="21.17" y1="8" x2="12" y2="8" stroke="currentColor" stroke-width="2"/><line x1="3.95" y1="6.06" x2="8.54" y2="14" stroke="currentColor" stroke-width="2"/><line x1="10.88" y1="21.94" x2="15.46" y2="14" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="4" y1="22" x2="4" y2="15" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="3.27 6.96 12 12.01 20.73 6.96" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2"/></symbol>
+</svg>
+
+<script>
+(function() {
+  'use strict';
+
+  /* =====================================================================
+     0. Constants & state
+     ===================================================================== */
+  const ADMIN_EMAIL = 'admin@piontok.app';
+  const ADMIN_PASSWORD = 'admin123';
+  const SESSION_KEY = 'piontok_admin_session';
+  const ANALYTICS_KEY = 'piontok_analytics';
+  const BLOCKED_KEY = 'piontok_blocked_users';
+  const BACKUPS_KEY = 'piontok_admin_backups';
+  const SETTINGS_KEY = 'piontok_admin_settings';
+  const LOGS_KEY = 'piontok_admin_logs';
+  const NOTIFS_KEY = 'piontok_admin_notifs';
+
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+  let currentPage = 'overview';
+  let liveRefreshTimer = null;
+  let clockTimer = null;
+  let userSortState = { col: 'lastSeen', dir: 'desc' };
+  let userPageState = { page: 1, perPage: 10 };
+  let sessionPageState = { page: 1, perPage: 10 };
+  let adsPageState = { page: 1, perPage: 10 };
+  let errorsPageState = { page: 1, perPage: 10 };
+
+  /* =====================================================================
+     1. Storage helpers (preserves exact same keys as the main app)
+     ===================================================================== */
+  function isLoggedIn() { try { return sessionStorage.getItem(SESSION_KEY) === '1'; } catch { return false; } }
+  function login() { try { sessionStorage.setItem(SESSION_KEY, '1'); } catch {} }
+  function logout() { try { sessionStorage.removeItem(SESSION_KEY); } catch {} }
+  function getAllData() { try { return JSON.parse(localStorage.getItem(ANALYTICS_KEY) || '[]'); } catch { return []; } }
+  function clearAllData() { localStorage.removeItem(ANALYTICS_KEY); }
+  function getBlockedUsers() { try { return JSON.parse(localStorage.getItem(BLOCKED_KEY) || '[]'); } catch { return []; } }
+  function saveBlockedUsers(list) { localStorage.setItem(BLOCKED_KEY, JSON.stringify(list)); }
+  function getBackups() { try { return JSON.parse(localStorage.getItem(BACKUPS_KEY) || '[]'); } catch { return []; } }
+  function saveBackups(list) { localStorage.setItem(BACKUPS_KEY, JSON.stringify(list)); }
+  function getSettings() { try { return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'); } catch { return {}; } }
+  function saveSettings(s) { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }
+  function getLogs() { try { return JSON.parse(localStorage.getItem(LOGS_KEY) || '[]'); } catch { return []; } }
+  function saveLogs(list) { localStorage.setItem(LOGS_KEY, JSON.stringify(list.slice(-500))); }
+  function getNotifs() { try { return JSON.parse(localStorage.getItem(NOTIFS_KEY) || '[]'); } catch { return []; } }
+  function saveNotifs(list) { localStorage.setItem(NOTIFS_KEY, JSON.stringify(list.slice(0, 50))); }
+
+  function blockUser(fpId, info) {
+    const list = getBlockedUsers();
+    if (!list.some(u => u.fpId === fpId)) {
+      list.push({ fpId, blocked: true, blockedAt: new Date().toISOString(), ...info });
+      saveBlockedUsers(list);
+      logAction('admin', 'User blocked', `Fingerprint: ${fpId.substring(0, 16)}…`);
+      pushNotif('warn', 'User blocked', `Fingerprint ${fpId.substring(0, 12)}… was blocked from accessing the site.`);
+    }
+  }
+  function unblockUser(fpId) {
+    const list = getBlockedUsers().filter(u => u.fpId !== fpId);
+    saveBlockedUsers(list);
+    logAction('admin', 'User unblocked', `Fingerprint: ${fpId.substring(0, 16)}…`);
+    pushNotif('success', 'User unblocked', `Fingerprint ${fpId.substring(0, 12)}… was restored.`);
+  }
+  function isUserBlocked(fpId) { return getBlockedUsers().some(u => u.fpId === fpId && u.blocked === true); }
+
+  function logAction(type, action, details) {
+    const logs = getLogs();
+    logs.push({ type, action, details: details || '', timestamp: new Date().toISOString() });
+    saveLogs(logs);
+  }
+  function pushNotif(level, title, body) {
+    const notifs = getNotifs();
+    notifs.unshift({ level, title, body, timestamp: new Date().toISOString(), read: false });
+    saveNotifs(notifs);
+    renderNotifBadge();
+  }
+
+  /* =====================================================================
+     2. Toast system
+     ===================================================================== */
+  const toast = {
+    show(msg, type = 'info', duration = 2500) {
+      const stack = $('#toastStack');
+      if (!stack) return;
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      const icon = type === 'success' ? 'i-check' : type === 'error' ? 'i-alert' : type === 'warn' ? 'i-alert' : 'i-info';
+      el.innerHTML = `
+        <svg><use href="#${icon}"/></svg>
+        <span class="toast-msg">${msg}</span>
+        <button class="toast-close" aria-label="Close">×</button>`;
+      stack.appendChild(el);
+      const close = () => {
+        el.classList.add('removing');
+        setTimeout(() => el.remove(), 250);
+      };
+      el.querySelector('.toast-close').addEventListener('click', close);
+      if (duration > 0) setTimeout(close, duration);
+      return el;
+    },
+    success(m, d) { this.show(m, 'success', d); },
+    error(m, d) { this.show(m, 'error', d); },
+    info(m, d) { this.show(m, 'info', d); },
+    warn(m, d) { this.show(m, 'warn', d); }
+  };
+
+  /* =====================================================================
+     3. Login
+     ===================================================================== */
+  $('#loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = $('#adminEmail').value.trim().toLowerCase();
+    const password = $('#adminPassword').value;
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      login();
+      logAction('login', 'Admin signed in', `Email: ${email}`);
+      pushNotif('success', 'Welcome back', 'You have signed in to the admin console.');
+      showDashboard();
+    } else {
+      const err = $('#loginError');
+      err.style.display = 'block';
+      logAction('security', 'Failed login attempt', `Email: ${email}`);
+      setTimeout(() => err.style.display = 'none', 3000);
+    }
+  });
+
+  function showDashboard() {
+    $('#loginScreen').style.display = 'none';
+    $('#dashboard').classList.add('active');
+    renderAll();
+    startClock();
+    startLiveRefresh();
+  }
+  function showLogin() {
+    $('#loginScreen').style.display = 'flex';
+    $('#dashboard').classList.remove('active');
+    stopClock();
+    stopLiveRefresh();
+  }
+
+  /* =====================================================================
+     4. Navigation (sidebar)
+     ===================================================================== */
+  $$('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const page = item.dataset.page;
+      if (!page) return;
+      navigateTo(page);
+      // Close mobile sidebar
+      $('#sidebar').classList.remove('open');
+      $('#mobileOverlay').classList.remove('open');
+    });
+  });
+  $('#menuToggle').addEventListener('click', () => {
+    $('#sidebar').classList.toggle('open');
+    $('#mobileOverlay').classList.toggle('open');
+  });
+  $('#mobileOverlay').addEventListener('click', () => {
+    $('#sidebar').classList.remove('open');
+    $('#mobileOverlay').classList.remove('open');
+  });
+
+  function navigateTo(page) {
+    currentPage = page;
+    $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === page));
+    $$('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + page));
+    const titles = {
+      overview: 'Overview', dashboard: 'Dashboard', users: 'Users',
+      downloads: 'Downloads', sessions: 'Sessions', analytics: 'Analytics',
+      revenue: 'Revenue', ads: 'Ads', countries: 'Countries',
+      errors: 'Error Monitoring', settings: 'Settings', logs: 'Logs',
+      backups: 'Backups', admin: 'Admin'
+    };
+    $('#topbarTitle').innerHTML = `Pion<span>Tok</span> · ${titles[page] || page}`;
+    // Lazy-render the page (some pages skip if already rendered)
+    renderPage(page);
+    // Scroll to top
+    $('#pageContent').scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* =====================================================================
+     5. Topbar: clock, notifications, refresh
+     ===================================================================== */
+  function startClock() {
+    const tick = () => {
+      const now = new Date();
+      const t = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const d = now.toLocaleDateString([], { month: 'short', day: 'numeric' });
+      const tEl = $('#topbarTime'); if (tEl) tEl.textContent = t;
+      const dEl = $('#topbarDate'); if (dEl) dEl.textContent = d;
+    };
+    tick();
+    clockTimer = setInterval(tick, 1000);
+  }
+  function stopClock() { if (clockTimer) { clearInterval(clockTimer); clockTimer = null; } }
+  function startLiveRefresh() {
+    stopLiveRefresh();
+    const s = getSettings();
+    if (s.liveRefresh === false) return;
+    liveRefreshTimer = setInterval(() => {
+      // Only refresh the visible page to keep things light
+      renderPage(currentPage, true);
+    }, 30000);
+  }
+  function stopLiveRefresh() { if (liveRefreshTimer) { clearInterval(liveRefreshTimer); liveRefreshTimer = null; } }
+
+  $('#refreshBtn').addEventListener('click', () => {
+    const btn = $('#refreshBtn');
+    const svg = btn.querySelector('svg');
+    if (svg) svg.style.animation = 'spin .6s linear';
+    setTimeout(() => { if (svg) svg.style.animation = ''; }, 600);
+    renderAll();
+    toast.success('Data refreshed');
+  });
+
+  $('#notifBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    $('#notifPanel').classList.toggle('open');
+    renderNotifList();
+  });
+  document.addEventListener('click', (e) => {
+    const panel = $('#notifPanel');
+    const btn = $('#notifBtn');
+    if (panel && panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)) {
+      panel.classList.remove('open');
+    }
+  });
+  $('#clearNotifBtn').addEventListener('click', () => {
+    saveNotifs([]);
+    renderNotifBadge();
+    renderNotifList();
+    toast.success('Notifications cleared');
+  });
+
+  function renderNotifBadge() {
+    const notifs = getNotifs();
+    const unread = notifs.filter(n => !n.read).length;
+    const badge = $('#notifBadge');
+    if (unread > 0) {
+      badge.style.display = 'grid';
+      badge.textContent = unread > 9 ? '9+' : unread;
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  function renderNotifList() {
+    const list = $('#notifList');
+    const notifs = getNotifs();
+    if (!notifs.length) {
+      list.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--text-3);font-size:.85rem;">No notifications</div>`;
+      return;
+    }
+    list.innerHTML = notifs.map(n => {
+      const icon = n.level === 'success' ? 'i-check' : n.level === 'warn' ? 'i-alert' : n.level === 'danger' ? 'i-alert' : 'i-info';
+      return `<div class="np-item ${n.level}">
+        <div class="np-icon"><svg><use href="#${icon}"/></svg></div>
+        <div class="np-text">
+          <div class="np-title">${n.title}</div>
+          <div class="np-time">${timeAgo(n.timestamp)}</div>
+        </div>
+      </div>`;
+    }).join('');
+    // Mark all as read
+    const updated = notifs.map(n => ({ ...n, read: true }));
+    saveNotifs(updated);
+    setTimeout(renderNotifBadge, 100);
+  }
+
+  /* =====================================================================
+     6. Utility helpers
+     ===================================================================== */
+  function formatTime(seconds) {
+    if (!seconds || seconds < 1) return '0s';
+    if (seconds < 60) return seconds + 's';
+    const m = Math.floor(seconds / 60), s = seconds % 60;
+    return s > 0 ? `${m}m ${s}s` : `${m}m`;
+  }
+  function timeAgo(iso) {
+    const d = new Date(iso);
+    const diff = Math.floor((Date.now() - d.getTime()) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    return Math.floor(diff / 86400) + 'd ago';
+  }
+  function formatBytes(bytes) {
+    if (!bytes || bytes <= 0) return '—';
+    const units = ['B', 'KB', 'MB', 'GB'];
+    let i = 0, n = bytes;
+    while (n >= 1024 && i < units.length - 1) { n /= 1024; i++; }
+    return `${n.toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
+  }
+  function formatNumber(n) {
+    if (n === undefined || n === null) return '0';
+    if (n >= 1e9) return (n / 1e9).toFixed(1) + 'B';
+    if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+    return String(n);
+  }
+  function dayKey(d) { return d.toISOString().slice(0, 10); }
+  function isSameDay(a, b) { return dayKey(a) === dayKey(b); }
+  function isToday(iso) { return isSameDay(new Date(iso), new Date()); }
+  function isThisWeek(iso) {
+    const d = new Date(iso); const now = new Date();
+    const weekAgo = new Date(now.getTime() - 7 * 86400 * 1000);
+    return d >= weekAgo;
+  }
+  function isThisMonth(iso) {
+    const d = new Date(iso); const now = new Date();
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }
+  function yesterdayIso() {
+    const y = new Date(Date.now() - 86400 * 1000);
+    return y.toISOString().slice(0, 10);
+  }
+
+  // Count-up animation
+  function countUp(el, target, opts) {
+    opts = opts || {};
+    const duration = opts.duration || 900;
+    const decimals = opts.decimals || 0;
+    const prefix = opts.prefix || '';
+    const suffix = opts.suffix || '';
+    const start = parseFloat(el.dataset.cur || '0');
+    const startTime = performance.now();
+    const step = (now) => {
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = start + (target - start) * eased;
+      el.textContent = prefix + (decimals ? val.toFixed(decimals) : Math.round(val).toLocaleString()) + suffix;
+      if (t < 1) requestAnimationFrame(step);
+      else el.dataset.cur = target;
+    };
+    requestAnimationFrame(step);
+  }
+
+  // SVG line chart
+  function renderLineChart(container, data, opts) {
+    opts = opts || {};
+    if (!data || data.length === 0) {
+      container.innerHTML = emptyInline('No data yet');
+      return;
+    }
+    const w = 600, h = 200, pad = 30;
+    const max = Math.max(...data.map(d => d.value), 1);
+    const stepX = (w - pad * 2) / Math.max(data.length - 1, 1);
+    const points = data.map((d, i) => {
+      const x = pad + i * stepX;
+      const y = h - pad - (d.value / max) * (h - pad * 2);
+      return { x, y, ...d };
+    });
+    const pathD = points.map((p, i) => (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
+    const areaD = pathD + ` L${(w - pad).toFixed(1)},${(h - pad).toFixed(1)} L${pad},${(h - pad).toFixed(1)} Z`;
+    const labels = data.map(d => d.label);
+    const xLabels = labels.map((lbl, i) => {
+      const x = pad + i * stepX;
+      return `<text x="${x.toFixed(1)}" y="${(h - pad + 16).toFixed(1)}" fill="rgba(255,255,255,.4)" font-size="10" text-anchor="middle">${lbl}</text>`;
+    }).join('');
+    const yLabels = [0, max / 2, max].map((v, i) => {
+      const y = h - pad - (i / 2) * (h - pad * 2);
+      return `<text x="${(pad - 6).toFixed(1)}" y="${(y + 3).toFixed(1)}" fill="rgba(255,255,255,.4)" font-size="10" text-anchor="end">${formatNumber(Math.round(v))}</text>`;
+    }).join('');
+    const dots = points.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3" fill="#bbea02"><title>${p.label}: ${p.value}</title></circle>`).join('');
+    container.innerHTML = `
+      <div class="line-chart-wrap">
+        <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="lc-grad-${Math.random().toString(36).slice(2, 7)}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(187,234,2,.4)"/>
+              <stop offset="100%" stop-color="rgba(187,234,2,0)"/>
+            </linearGradient>
+          </defs>
+          <path d="${areaD}" fill="url(#lc-grad-area)" />
+          <path d="${pathD}" fill="none" stroke="#bbea02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          ${dots}
+          ${xLabels}
+          ${yLabels}
+        </svg>
+      </div>`;
+    // Apply gradient fill manually since we generated a random ID
+    const grad = container.querySelector('linearGradient');
+    if (grad) {
+      grad.id = 'lc-grad-area';
+      const area = container.querySelector('path');
+      if (area) area.setAttribute('fill', 'url(#lc-grad-area)');
+    }
+  }
+
+  // Donut chart
+  function renderDonut(container, data, opts) {
+    opts = opts || {};
+    if (!data || data.length === 0) {
+      container.innerHTML = emptyInline('No data yet');
+      return;
+    }
+    const colors = ['#bbea02', '#4fc3f7', '#ffb84d', '#ff4d6d', '#a78bfa', '#4ade80', '#f472b6'];
+    const total = data.reduce((s, d) => s + d.value, 0) || 1;
+    const r = 60, cx = 80, cy = 80, strokeWidth = 18, circumference = 2 * Math.PI * r;
+    let offset = 0;
+    const segments = data.map((d, i) => {
+      const frac = d.value / total;
+      const len = frac * circumference;
+      const seg = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[i % colors.length]}" stroke-width="${strokeWidth}" stroke-dasharray="${len.toFixed(2)} ${(circumference - len).toFixed(2)}" stroke-dashoffset="${(-offset).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"><title>${d.label}: ${d.value} (${(frac * 100).toFixed(1)}%)</title></circle>`;
+      offset += len;
+      return seg;
+    }).join('');
+    const legend = data.map((d, i) => `
+      <div class="donut-legend-item">
+        <span class="lg-dot" style="background:${colors[i % colors.length]}"></span>
+        <span class="lg-label">${d.label}</span>
+        <span class="lg-val">${formatNumber(d.value)}</span>
+      </div>`).join('');
+    container.innerHTML = `
+      <div class="donut-wrap">
+        <svg viewBox="0 0 160 160">
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="${strokeWidth}"/>
+          ${segments}
+          <text x="${cx}" y="${cy - 4}" text-anchor="middle" fill="#fff" font-size="20" font-weight="800">${formatNumber(total)}</text>
+          <text x="${cx}" y="${cy + 14}" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="10">TOTAL</text>
+        </svg>
+        <div class="donut-legend">${legend}</div>
+      </div>`;
+  }
+
+  // Bar chart
+  function renderBars(container, data, opts) {
+    opts = opts || {};
+    if (!data || data.length === 0) {
+      container.innerHTML = emptyInline('No data yet');
+      return;
+    }
+    const max = Math.max(...data.map(d => d.value), 1);
+    container.innerHTML = `<div class="bar-chart">${data.map(d => `
+      <div class="bar-row">
+        <div class="bar-label">${d.label}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${((d.value / max) * 100).toFixed(1)}%"></div></div>
+        <div class="bar-value">${formatNumber(d.value)}</div>
+      </div>`).join('')}</div>`;
+  }
+
+  // Empty inline
+  function emptyInline(msg) {
+    return `<div style="padding:2rem;text-align:center;color:var(--text-3);font-size:.85rem;">${msg}</div>`;
+  }
+  function emptyState(title, msg, icon = 'i-info') {
+    return `<div class="empty-state">
+      <div class="es-icon"><svg><use href="#${icon}"/></svg></div>
+      <h4>${title}</h4>
+      <p>${msg}</p>
+    </div>`;
+  }
+
+  /* =====================================================================
+     7. Aggregations — derive all metrics from raw analytics events
+     ===================================================================== */
+  function getAggregates() {
+    const all = getAllData();
+    const fingerprints = all.filter(e => e.type === 'fingerprint');
+    const links = all.filter(e => e.type === 'link_paste');
+    const sessions = all.filter(e => e.type === 'session_start');
+    const sessionEnds = all.filter(e => e.type === 'session_end');
+    const ads = all.filter(e => e.type === 'ad_impression');
+    const downloads = all.filter(e => e.type === 'download_complete');
+    const errors = all.filter(e => e.type === 'error');
+
+    // Unique users (dedupe by fpId, keep first/last seen + visit count)
+    const userMap = {};
+    fingerprints.forEach(e => {
+      if (!userMap[e.fpId]) {
+        userMap[e.fpId] = { ...e, firstSeen: e.timestamp, lastSeen: e.timestamp, visitCount: 1, sessions: 0, downloads: 0, adsViewed: 0, links: 0 };
+      } else {
+        userMap[e.fpId].lastSeen = e.timestamp;
+        userMap[e.fpId].visitCount++;
+      }
+    });
+    // Enrich users with related events
+    sessions.forEach(e => { if (userMap[e.fpId]) userMap[e.fpId].sessions++; });
+    downloads.forEach(e => { if (userMap[e.fpId]) userMap[e.fpId].downloads++; });
+    ads.forEach(e => { if (userMap[e.fpId]) userMap[e.fpId].adsViewed++; });
+    links.forEach(e => { if (userMap[e.fpId]) userMap[e.fpId].links++; });
+    const uniqueUsers = Object.values(userMap).sort((a, b) => new Date(b.lastSeen) - new Date(a.lastSeen));
+    const blockedCount = uniqueUsers.filter(u => isUserBlocked(u.fpId)).length;
+
+    // Platform / device / browser / OS / country breakdowns
+    const platforms = {}, devices = {}, browsers = {}, oses = {}, countries = {}, cities = {};
+    const dlPlatforms = {}, dlDevices = {}, dlCountries = {};
+    links.forEach(e => {
+      platforms[e.platform] = (platforms[e.platform] || 0) + 1;
+      if (e.deviceType) devices[e.deviceType] = (devices[e.deviceType] || 0) + 1;
+      if (e.browser) browsers[e.browser] = (browsers[e.browser] || 0) + 1;
+      if (e.os) oses[e.os] = (oses[e.os] || 0) + 1;
+      if (e.country) { countries[e.country] = (countries[e.country] || 0) + 1; }
+    });
+    downloads.forEach(e => {
+      dlPlatforms[e.platform] = (dlPlatforms[e.platform] || 0) + 1;
+      if (e.deviceType) dlDevices[e.deviceType] = (dlDevices[e.deviceType] || 0) + 1;
+      if (e.country) dlCountries[e.country] = (dlCountries[e.country] || 0) + 1;
+    });
+    sessions.forEach(e => {
+      if (e.deviceType) devices[e.deviceType] = (devices[e.deviceType] || 0) + 1;
+      if (e.browser) browsers[e.browser] = (browsers[e.browser] || 0) + 1;
+      if (e.os) oses[e.os] = (oses[e.os] || 0) + 1;
+      if (e.country) { countries[e.country] = (countries[e.country] || 0) + 1; }
+      if (e.timezone) {
+        const parts = e.timezone.split('/');
+        const city = parts[parts.length - 1] || 'Unknown';
+        cities[city] = (cities[city] || 0) + 1;
+      }
+    });
+
+    // Time-based metrics
+    const totalTime = sessionEnds.reduce((s, e) => s + (e.timeSpentSeconds || 0), 0);
+    const totalActive = sessionEnds.reduce((s, e) => s + (e.activeTimeSeconds || 0), 0);
+    const totalAds = ads.length;
+    const downloadedLinks = links.filter(e => e.downloaded).length;
+    const successDownloads = downloads.filter(e => e.success !== false).length;
+    const failedDownloads = errors.filter(e => /DOWNLOAD|API_FAIL|TIMEOUT|HTTP_|INVALID/.test(e.errorType || '')).length;
+    const avgSessionTime = sessionEnds.length ? totalTime / sessionEnds.length : 0;
+    const avgActiveTime = sessionEnds.length ? totalActive / sessionEnds.length : 0;
+
+    // Today/Week/Month slices
+    const downloadsToday = downloads.filter(e => isToday(e.timestamp)).length;
+    const downloadsWeek = downloads.filter(e => isThisWeek(e.timestamp)).length;
+    const downloadsMonth = downloads.filter(e => isThisMonth(e.timestamp)).length;
+    const sessionsToday = sessions.filter(e => isToday(e.timestamp)).length;
+    const linksToday = links.filter(e => isToday(e.timestamp)).length;
+    const adsToday = ads.filter(e => isToday(e.timestamp)).length;
+    const usersToday = uniqueUsers.filter(u => isToday(u.lastSeen)).length;
+    const newUsersToday = uniqueUsers.filter(u => isToday(u.firstSeen)).length;
+    const errorsToday = errors.filter(e => isToday(e.timestamp)).length;
+
+    // Returning vs new (rough heuristic: firstSeen older than 7 days = returning)
+    const returningUsers = uniqueUsers.filter(u => new Date(u.firstSeen) < new Date(Date.now() - 7 * 86400 * 1000)).length;
+    const newUsers = uniqueUsers.length - returningUsers;
+
+    // DAU/MAU
+    const dauSet = new Set();
+    uniqueUsers.forEach(u => { if (isToday(u.lastSeen)) dauSet.add(u.fpId); });
+    const mauSet = new Set();
+    uniqueUsers.forEach(u => {
+      const d = new Date(u.lastSeen);
+      if (d >= new Date(Date.now() - 30 * 86400 * 1000)) mauSet.add(u.fpId);
+    });
+
+    // Bounce rate: users with exactly 1 session_start and no downloads
+    const bouncedUsers = uniqueUsers.filter(u => u.sessions <= 1 && u.downloads === 0).length;
+    const bounceRate = uniqueUsers.length ? (bouncedUsers / uniqueUsers.length) * 100 : 0;
+
+    // Conversion rate: downloads / link pastes
+    const conversionRate = links.length ? (downloadedLinks / links.length) * 100 : 0;
+
+    // Success rate
+    const successRate = (successDownloads + failedDownloads) ? (successDownloads / (successDownloads + failedDownloads)) * 100 : 100;
+
+    // Avg processing time (rough — based on downloadedAt - timestamp deltas where available)
+    let procTotal = 0, procCount = 0;
+    links.forEach(e => {
+      if (e.downloaded && e.downloadedAt) {
+        const delta = new Date(e.downloadedAt) - new Date(e.timestamp);
+        if (delta > 0 && delta < 5 * 60 * 1000) { procTotal += delta / 1000; procCount++; }
+      }
+    });
+    const avgProcessingTime = procCount ? procTotal / procCount : 0;
+
+    // Revenue (estimated)
+    const s = getSettings();
+    const cpm = parseFloat(s.cpm || '2.5');
+    const ctr = parseFloat(s.ctr || '1.5');
+    const totalRevenue = (totalAds / 1000) * cpm;
+    const revenueToday = (adsToday / 1000) * cpm;
+    const revenueWeek = (ads.filter(e => isThisWeek(e.timestamp)).length / 1000) * cpm;
+    const revenueMonth = (ads.filter(e => isThisMonth(e.timestamp)).length / 1000) * cpm;
+    const revenueYesterday = (ads.filter(e => dayKey(new Date(e.timestamp)) === yesterdayIso()).length / 1000) * cpm;
+    const clicks = Math.round(totalAds * ctr / 100);
+    const fillRate = ads.length ? Math.min(100, (ads.length / Math.max(ads.length + errors.length, 1)) * 100) : 0;
+    const rpm = totalAds ? (totalRevenue / totalAds) * 1000 : 0;
+    const actualCtr = totalAds ? (clicks / totalAds) * 100 : 0;
+
+    // Per-placement breakdown
+    const placements = {};
+    ads.forEach(e => {
+      const p = e.adLocation || 'unknown';
+      if (!placements[p]) placements[p] = { impressions: 0, clicks: 0, revenue: 0 };
+      placements[p].impressions++;
+      placements[p].clicks += Math.round(ctr / 100);
+      placements[p].revenue += (1 / 1000) * cpm;
+    });
+
+    // Error type breakdown
+    const errorTypes = {};
+    errors.forEach(e => {
+      const t = e.errorType || 'UNKNOWN';
+      errorTypes[t] = (errorTypes[t] || 0) + 1;
+    });
+
+    // Top creators
+    const creators = {};
+    links.forEach(e => {
+      if (e.creatorUsername) {
+        const k = '@' + e.creatorUsername;
+        creators[k] = (creators[k] || 0) + 1;
+      }
+    });
+
+    // Time-series: downloads per day (last 14 days)
+    const downloadsPerDay = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 86400 * 1000);
+      const key = dayKey(d);
+      const count = downloads.filter(e => dayKey(new Date(e.timestamp)) === key).length;
+      downloadsPerDay.push({ label: d.toLocaleDateString([], { month: 'short', day: 'numeric' }), value: count });
+    }
+
+    // Sessions per day (last 14 days)
+    const sessionsPerDay = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 86400 * 1000);
+      const key = dayKey(d);
+      const count = sessions.filter(e => dayKey(new Date(e.timestamp)) === key).length;
+      sessionsPerDay.push({ label: d.toLocaleDateString([], { month: 'short', day: 'numeric' }), value: count });
+    }
+
+    // Errors per day
+    const errorsPerDay = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 86400 * 1000);
+      const key = dayKey(d);
+      const count = errors.filter(e => dayKey(new Date(e.timestamp)) === key).length;
+      errorsPerDay.push({ label: d.toLocaleDateString([], { month: 'short', day: 'numeric' }), value: count });
+    }
+
+    // Downloads per hour (today)
+    const downloadsPerHour = [];
+    for (let h = 0; h < 24; h++) {
+      const count = downloads.filter(e => {
+        if (!isToday(e.timestamp)) return false;
+        return new Date(e.timestamp).getHours() === h;
+      }).length;
+      downloadsPerHour.push({ label: h + 'h', value: count });
+    }
+
+    // DAU last 14 days
+    const dauSeries = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 86400 * 1000);
+      const key = dayKey(d);
+      const set = new Set();
+      fingerprints.forEach(e => { if (dayKey(new Date(e.timestamp)) === key) set.add(e.fpId); });
+      dauSeries.push({ label: d.toLocaleDateString([], { month: 'short', day: 'numeric' }), value: set.size });
+    }
+
+    // Session heatmap (hour of day × day of week)
+    const heatmap = Array.from({ length: 7 }, () => Array(24).fill(0));
+    sessions.forEach(e => {
+      const d = new Date(e.timestamp);
+      const day = d.getDay();
+      const hour = d.getHours();
+      heatmap[day][hour]++;
+    });
+    const heatmapMax = Math.max(...heatmap.flat(), 1);
+
+    return {
+      all, uniqueUsers, blockedCount, links, sessions, sessionEnds, ads, downloads, errors,
+      platforms, devices, browsers, oses, countries, cities,
+      dlPlatforms, dlDevices, dlCountries,
+      totalTime, totalActive, totalAds, downloadedLinks,
+      successDownloads, failedDownloads, avgSessionTime, avgActiveTime,
+      downloadsToday, downloadsWeek, downloadsMonth,
+      sessionsToday, linksToday, adsToday, usersToday, newUsersToday, errorsToday,
+      returningUsers, newUsers, dau: dauSet.size, mau: mauSet.size,
+      bounceRate, conversionRate, successRate, avgProcessingTime,
+      totalRevenue, revenueToday, revenueWeek, revenueMonth, revenueYesterday,
+      clicks, fillRate, rpm, actualCtr, cpm,
+      placements, errorTypes, creators,
+      downloadsPerDay, sessionsPerDay, errorsPerDay, downloadsPerHour, dauSeries, heatmap, heatmapMax
+    };
+  }
+
+  /* =====================================================================
+     8. Renderers — each page renders independently
+     ===================================================================== */
+  function renderPage(page, isAuto) {
+    switch (page) {
+      case 'overview': renderOverview(); break;
+      case 'dashboard': renderDashboard(); break;
+      case 'users': renderUsers(); break;
+      case 'downloads': renderDownloads(); break;
+      case 'sessions': renderSessions(); break;
+      case 'analytics': renderAnalytics(); break;
+      case 'revenue': renderRevenue(); break;
+      case 'ads': renderAds(); break;
+      case 'countries': renderCountries(); break;
+      case 'errors': renderErrors(); break;
+      case 'settings': renderSettings(); break;
+      case 'logs': renderLogs(); break;
+      case 'backups': renderBackups(); break;
+      case 'admin': /* static */ break;
+    }
+  }
+
+  function statCard(label, value, opts) {
+    opts = opts || {};
+    const icon = opts.icon || 'i-activity';
+    const variant = opts.variant || '';
+    const delta = opts.delta;
+    const deltaClass = delta && delta.dir === 'up' ? 'up' : delta && delta.dir === 'down' ? 'down' : '';
+    const deltaIcon = delta && delta.dir === 'up' ? 'i-arrow-up' : delta && delta.dir === 'down' ? 'i-arrow-down' : '';
+    return `<div class="stat-card ${variant}">
+      <div class="stat-icon"><svg><use href="#${icon}"/></svg></div>
+      <div class="stat-label">${label}</div>
+      <div class="stat-value" data-target="${typeof value === 'number' ? value : 0}">${typeof value === 'number' ? '0' : value}</div>
+      ${delta ? `<div class="stat-delta ${deltaClass}"><svg><use href="#${deltaIcon}"/></svg>${delta.text}</div>` : ''}
+    </div>`;
+  }
+
+  function renderOverview() {
+    const a = getAggregates();
+    const stats = $('#overviewStats');
+    stats.innerHTML = [
+      statCard('Total Users', a.uniqueUsers.length, { icon: 'i-users', delta: a.newUsersToday > 0 ? { dir: 'up', text: `+${a.newUsersToday} today` } : null }),
+      statCard('Online Now', a.dau, { icon: 'i-bolt', variant: 'success' }),
+      statCard('Downloads Today', a.downloadsToday, { icon: 'i-download' }),
+      statCard('Downloads This Week', a.downloadsWeek, { icon: 'i-download' }),
+      statCard('Downloads This Month', a.downloadsMonth, { icon: 'i-download' }),
+      statCard('Revenue Today', '$' + a.revenueToday.toFixed(2), { icon: 'i-dollar', variant: 'success' }),
+      statCard('Revenue This Month', '$' + a.revenueMonth.toFixed(2), { icon: 'i-dollar', variant: 'success' }),
+      statCard('Ad Revenue', '$' + a.totalRevenue.toFixed(2), { icon: 'i-dollar' }),
+      statCard('Avg Session Time', formatTime(Math.round(a.avgSessionTime)), { icon: 'i-clock' }),
+      statCard('Bounce Rate', a.bounceRate.toFixed(1) + '%', { icon: 'i-trending-down', variant: a.bounceRate > 60 ? 'warn' : '' }),
+      statCard('Blocked Users', a.blockedCount, { icon: 'i-block', variant: a.blockedCount > 0 ? 'danger' : '' }),
+      statCard('Returning Users', a.returningUsers, { icon: 'i-users' }),
+      statCard('New Users', a.newUsers, { icon: 'i-users', variant: 'success' }),
+      statCard('Success Rate', a.successRate.toFixed(1) + '%', { icon: 'i-check', variant: 'success' }),
+      statCard('Failed Downloads', a.failedDownloads, { icon: 'i-alert', variant: a.failedDownloads > 0 ? 'danger' : '' }),
+      statCard('Avg Processing Time', a.avgProcessingTime ? Math.round(a.avgProcessingTime / 1000 * 10) / 10 + 's' : '—', { icon: 'i-clock' })
+    ].join('');
+    // Animate counters
+    $$('#overviewStats .stat-value[data-target]').forEach(el => {
+      const t = parseFloat(el.dataset.target);
+      if (!isNaN(t) && el.textContent !== el.dataset.target) countUp(el, t);
+    });
+    // Charts
+    renderLineChart($('#overviewChart'), a.downloadsPerDay);
+    renderDonut($('#platformDonut'), Object.entries(a.platforms).map(([k, v]) => ({ label: k, value: v })));
+    renderDonut($('#deviceDonut'), Object.entries(a.devices).map(([k, v]) => ({ label: k, value: v })));
+    renderBars($('#topCountriesBar'), Object.entries(a.countries).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([k, v]) => ({ label: k, value: v })));
+    renderLiveActivity(a);
+    renderAiInsights(a);
+    // Nav badges
+    const ub = $('#navBadgeUsers'); if (ub) ub.textContent = a.uniqueUsers.length;
+    const eb = $('#navBadgeErrors'); if (eb) { if (a.errors.length > 0) { eb.style.display = 'grid'; eb.textContent = a.errors.length; } else { eb.style.display = 'none'; } }
+  }
+
+  function renderDashboard() {
+    const a = getAggregates();
+    const stats = $('#dashboardStats');
+    stats.innerHTML = [
+      statCard('Total Sessions', a.sessions.length, { icon: 'i-clock' }),
+      statCard('Total Downloads', a.downloads.length, { icon: 'i-download' }),
+      statCard('Total Ads', a.totalAds, { icon: 'i-eye' }),
+      statCard('Total Revenue', '$' + a.totalRevenue.toFixed(2), { icon: 'i-dollar', variant: 'success' }),
+      statCard('Active Users', a.dau, { icon: 'i-bolt', variant: 'success' }),
+      statCard('Conversion Rate', a.conversionRate.toFixed(1) + '%', { icon: 'i-target' })
+    ].join('');
+    $$('#dashboardStats .stat-value[data-target]').forEach(el => {
+      const t = parseFloat(el.dataset.target);
+      if (!isNaN(t)) countUp(el, t);
+    });
+    renderLineChart($('#hourlyChart'), a.downloadsPerHour);
+    renderLineChart($('#sessionsChart'), a.sessionsPerDay);
+    renderDonut($('#browserDonut'), Object.entries(a.browsers).map(([k, v]) => ({ label: k, value: v })));
+    renderDonut($('#osDonut'), Object.entries(a.oses).map(([k, v]) => ({ label: k, value: v })));
+    renderLineChart($('#weeklyGrowthChart'), a.dauSeries);
+  }
+
+  // Activity feed
+  function renderLiveActivity(a) {
+    const container = $('#liveActivity');
+    if (!container) return;
+    const events = a.all.slice(-30).reverse();
+    if (!events.length) {
+      container.innerHTML = emptyState('No activity yet', 'When users interact with the site, their actions will appear here in real time.', 'i-activity');
+      return;
+    }
+    const iconMap = {
+      fingerprint: { icon: 'i-user', variant: 'info' },
+      session_start: { icon: 'i-clock', variant: 'success' },
+      session_end: { icon: 'i-clock', variant: '' },
+      link_paste: { icon: 'i-clipboard', variant: '' },
+      ad_impression: { icon: 'i-eye', variant: 'warn' },
+      download_complete: { icon: 'i-download', variant: 'success' },
+      error: { icon: 'i-alert', variant: 'danger' }
+    };
+    container.innerHTML = events.map(e => {
+      const m = iconMap[e.type] || { icon: 'i-activity', variant: '' };
+      let title = e.type.replace(/_/g, ' ');
+      let meta = timeAgo(e.timestamp);
+      if (e.type === 'link_paste') title = `Pasted ${e.platform || ''} link`;
+      else if (e.type === 'download_complete') title = `Downloaded ${e.platform || ''} video`;
+      else if (e.type === 'ad_impression') title = `Viewed ad: ${e.adLocation || ''}`;
+      else if (e.type === 'error') title = `Error: ${e.errorType || ''}`;
+      else if (e.type === 'session_start') title = 'Session started';
+      else if (e.type === 'session_end') title = `Session ended (${formatTime(e.timeSpentSeconds || 0)})`;
+      else if (e.type === 'fingerprint') title = 'User identified';
+      if (e.deviceType) meta += ' · ' + e.deviceType;
+      if (e.country && e.country !== 'unknown') meta += ' · ' + e.country;
+      return `<div class="activity-item">
+        <div class="activity-icon ${m.variant}"><svg><use href="#${m.icon}"/></svg></div>
+        <div class="activity-text">
+          <div class="at-title">${title}</div>
+          <div class="at-meta">${meta}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // AI Insights
+  function renderAiInsights(a) {
+    const container = $('#aiInsights');
+    if (!container) return;
+    const insights = [];
+    // Top platform
+    const topPlatform = Object.entries(a.platforms).sort((x, y) => y[1] - x[1])[0];
+    if (topPlatform) {
+      const pct = a.links.length ? (topPlatform[1] / a.links.length * 100).toFixed(0) : 0;
+      insights.push({ level: '', icon: 'i-bolt', title: `Top platform: ${topPlatform[0]}`, desc: `${topPlatform[0]} accounts for ${pct}% of all pasted links (${topPlatform[1]} total).` });
+    }
+    // Downloads trend
+    if (a.downloadsPerDay.length >= 2) {
+      const today = a.downloadsPerDay[a.downloadsPerDay.length - 1].value;
+      const yesterday = a.downloadsPerDay[a.downloadsPerDay.length - 2].value;
+      if (yesterday > 0) {
+        const change = ((today - yesterday) / yesterday * 100).toFixed(0);
+        if (change > 0) insights.push({ level: 'success', icon: 'i-trending-up', title: `Downloads up ${change}%`, desc: `${today} downloads today vs ${yesterday} yesterday.` });
+        else if (change < 0) insights.push({ level: 'warn', icon: 'i-trending-down', title: `Downloads down ${Math.abs(change)}%`, desc: `${today} downloads today vs ${yesterday} yesterday.` });
+      }
+    }
+    // Top country
+    const topCountry = Object.entries(a.countries).sort((x, y) => y[1] - x[1])[0];
+    if (topCountry && topCountry[0] !== 'unknown') {
+      insights.push({ level: '', icon: 'i-globe', title: `Most active country: ${topCountry[0]}`, desc: `${topCountry[1]} sessions originated from ${topCountry[0]}.` });
+    }
+    // Peak traffic hour
+    if (a.downloadsPerHour.some(d => d.value > 0)) {
+      const peak = a.downloadsPerHour.reduce((m, d) => d.value > m.value ? d : m, { value: 0, label: '—' });
+      insights.push({ level: '', icon: 'i-clock', title: `Peak traffic at ${peak.label}`, desc: `Most downloads happened around ${peak.label} today.` });
+    }
+    // Bounce rate alert
+    if (a.bounceRate > 60) {
+      insights.push({ level: 'warn', icon: 'i-alert', title: `High bounce rate: ${a.bounceRate.toFixed(0)}%`, desc: 'Many users leave without downloading. Consider improving the landing experience.' });
+    }
+    // Errors
+    if (a.errorsToday > 0) {
+      insights.push({ level: 'danger', icon: 'i-alert', title: `${a.errorsToday} errors today`, desc: 'Check the Errors page for details and consider fixing the underlying issues.' });
+    }
+    // Revenue
+    if (a.revenueToday > 0) {
+      insights.push({ level: 'success', icon: 'i-dollar', title: `Revenue today: $${a.revenueToday.toFixed(2)}`, desc: `Estimated based on ${a.adsToday} ad impressions at $${a.cpm}/CPM.` });
+    }
+    if (!insights.length) {
+      container.innerHTML = emptyInline('No insights yet — gather more activity to unlock AI-powered insights.');
+      return;
+    }
+    container.innerHTML = `<div class="grid-3">${insights.map(i => `
+      <div class="insight-card ${i.level}">
+        <div class="insight-icon"><svg><use href="#${i.icon}"/></svg></div>
+        <div>
+          <div class="insight-title">${i.title}</div>
+          <div class="insight-desc">${i.desc}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  // USERS
+  function renderUsers() {
+    const a = getAggregates();
+    $('#userStats').innerHTML = [
+      statCard('Unique Users', a.uniqueUsers.length, { icon: 'i-users' }),
+      statCard('Blocked', a.blockedCount, { icon: 'i-block', variant: a.blockedCount > 0 ? 'danger' : '' }),
+      statCard('Active', a.uniqueUsers.length - a.blockedCount, { icon: 'i-check', variant: 'success' }),
+      statCard('New Today', a.newUsersToday, { icon: 'i-users', variant: 'success' })
+    ].join('');
+    $$('#userStats .stat-value[data-target]').forEach(el => { const t = parseFloat(el.dataset.target); if (!isNaN(t)) countUp(el, t); });
+
+    const search = ($('#userSearch').value || '').toLowerCase();
+    const statusF = $('#userStatusFilter').value;
+    const deviceF = $('#userDeviceFilter').value;
+    let filtered = a.uniqueUsers.filter(u => {
+      if (statusF === 'active' && isUserBlocked(u.fpId)) return false;
+      if (statusF === 'blocked' && !isUserBlocked(u.fpId)) return false;
+      if (deviceF && u.deviceType !== deviceF) return false;
+      if (search) {
+        const hay = (u.fpId + ' ' + u.deviceType + ' ' + u.os + ' ' + u.browser + ' ' + (u.screen || '') + ' ' + (u.country || '')).toLowerCase();
+        if (!hay.includes(search)) return false;
+      }
+      return true;
+    });
+    // Sort
+    const sortCol = userSortState.col;
+    const sortDir = userSortState.dir === 'asc' ? 1 : -1;
+    filtered.sort((x, y) => {
+      let a2, b2;
+      if (sortCol === 'idx') { a2 = 0; b2 = 0; }
+      else if (sortCol === 'status') { a2 = isUserBlocked(x.fpId) ? 1 : 0; b2 = isUserBlocked(y.fpId) ? 1 : 0; }
+      else if (sortCol === 'firstSeen' || sortCol === 'lastSeen') { a2 = new Date(x[sortCol]).getTime(); b2 = new Date(y[sortCol]).getTime(); }
+      else { a2 = (x[sortCol] || '').toString().toLowerCase(); b2 = (y[sortCol] || '').toString().toLowerCase(); }
+      if (a2 < b2) return -1 * sortDir;
+      if (a2 > b2) return 1 * sortDir;
+      return 0;
+    });
+    // Pagination
+    const total = filtered.length;
+    const perPage = userPageState.perPage;
+    const pages = Math.max(1, Math.ceil(total / perPage));
+    if (userPageState.page > pages) userPageState.page = pages;
+    const start = (userPageState.page - 1) * perPage;
+    const pageItems = filtered.slice(start, start + perPage);
+    $('#usersCount').textContent = `${total} user${total === 1 ? '' : 's'}`;
+    const body = $('#usersTableBody');
+    if (!pageItems.length) {
+      body.innerHTML = `<tr class="empty-row"><td colspan="9">${emptyState('No users found', 'Try adjusting your filters or wait for visitors to arrive on the site.', 'i-users')}</td></tr>`;
+    } else {
+      body.innerHTML = pageItems.map((u, i) => {
+        const blocked = isUserBlocked(u.fpId);
+        const shortFp = u.fpId ? u.fpId.substring(0, 16) + '…' : '—';
+        const idx = start + i + 1;
+        return `<tr data-fp="${u.fpId}">
+          <td>${idx}</td>
+          <td class="mono" title="${u.fpId}">${shortFp}</td>
+          <td class="time-cell">${new Date(u.firstSeen).toLocaleString()}</td>
+          <td class="time-cell">${new Date(u.lastSeen).toLocaleString()}</td>
+          <td><span class="badge badge-device">${u.deviceType || '—'}</span></td>
+          <td>${u.os || '—'}</td>
+          <td>${u.browser || '—'}</td>
+          <td>${blocked ? '<span class="badge badge-danger">Blocked</span>' : '<span class="badge badge-success">Active</span>'}</td>
+          <td>
+            <div style="display:flex;gap:.25rem;">
+              <button class="btn-ghost" data-view="${u.fpId}" style="padding:.3rem .5rem;font-size:.72rem;" title="View details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+              ${blocked
+                ? `<button class="btn-ghost" data-unblock="${u.fpId}" style="padding:.3rem .55rem;font-size:.72rem;color:var(--success);border-color:rgba(74,222,128,.3);background:var(--success-soft);">Unblock</button>`
+                : `<button class="btn-danger" data-block="${u.fpId}" data-info='${JSON.stringify({ deviceType: u.deviceType, os: u.os, browser: u.browser }).replace(/'/g, "&#39;")}' style="padding:.3rem .55rem;font-size:.72rem;">Block</button>`
+              }
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+    // Sort indicators
+    $$('#usersTable th[data-sort]').forEach(th => {
+      th.classList.toggle('sorted', th.dataset.sort === userSortState.col);
+      const ind = th.querySelector('.sort-ind') || (() => { const s = document.createElement('span'); s.className = 'sort-ind'; th.appendChild(s); return s; })();
+      ind.textContent = th.dataset.sort === userSortState.col ? (userSortState.dir === 'asc' ? '↑' : '↓') : '↕';
+    });
+    // Pagination
+    renderPagination('#usersPagination', userPageState, pages, total, (p) => { userPageState.page = p; renderUsers(); });
+    // Wire up block/unblock/view
+    $$('[data-block]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const fpId = btn.dataset.block;
+        const info = JSON.parse(btn.dataset.info.replace(/&#39;/g, "'"));
+        if (confirm('Block this user? They will see "Access Denied" on next visit.')) {
+          blockUser(fpId, info);
+          renderUsers();
+          toast.success('User blocked');
+        }
+      });
+    });
+    $$('[data-unblock]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        unblockUser(btn.dataset.unblock);
+        renderUsers();
+        toast.success('User unblocked');
+      });
+    });
+    $$('[data-view]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openUserDrawer(btn.dataset.view, a);
+      });
+    });
+    $$('#usersTableBody tr[data-fp]').forEach(tr => {
+      tr.addEventListener('click', () => openUserDrawer(tr.dataset.fp, a));
+    });
+  }
+
+  function renderPagination(sel, state, pages, total, onChange) {
+    const el = $(sel);
+    if (!el) return;
+    if (pages <= 1) { el.innerHTML = `<div></div><div class="pages"></div><div>${total} item${total === 1 ? '' : 's'}</div>`; return; }
+    let buttons = '';
+    const maxBtns = 5;
+    let startP = Math.max(1, state.page - Math.floor(maxBtns / 2));
+    let endP = Math.min(pages, startP + maxBtns - 1);
+    if (endP - startP < maxBtns - 1) startP = Math.max(1, endP - maxBtns + 1);
+    if (startP > 1) buttons += `<button data-p="1">1</button>${startP > 2 ? '<span style="color:var(--text-3);">…</span>' : ''}`;
+    for (let p = startP; p <= endP; p++) buttons += `<button class="${p === state.page ? 'active' : ''}" data-p="${p}">${p}</button>`;
+    if (endP < pages) buttons += `${endP < pages - 1 ? '<span style="color:var(--text-3);">…</span>' : ''}<button data-p="${pages}">${pages}</button>`;
+    el.innerHTML = `
+      <div>Page ${state.page} of ${pages} · ${total} items</div>
+      <div class="pages">
+        <button data-p="${state.page - 1}" ${state.page === 1 ? 'disabled' : ''}>‹</button>
+        ${buttons}
+        <button data-p="${state.page + 1}" ${state.page === pages ? 'disabled' : ''}>›</button>
+      </div>
+      <div></div>`;
+    el.querySelectorAll('button[data-p]').forEach(b => {
+      b.addEventListener('click', () => {
+        const p = parseInt(b.dataset.p, 10);
+        if (!isNaN(p) && p >= 1 && p <= pages) onChange(p);
+      });
+    });
+  }
+
+  // User drawer
+  function openUserDrawer(fpId, a) {
+    const user = a.uniqueUsers.find(u => u.fpId === fpId);
+    if (!user) return;
+    const blocked = isUserBlocked(fpId);
+    $('#drawerAvatar').textContent = (user.os || user.deviceType || '?')[0].toUpperCase();
+    $('#drawerTitle').textContent = user.deviceType + ' · ' + (user.os || 'Unknown');
+    $('#drawerSub').textContent = fpId;
+    // User's events for timeline
+    const userEvents = a.all.filter(e => e.fpId === fpId).sort((x, y) => new Date(y.timestamp) - new Date(x.timestamp)).slice(0, 8);
+    const timelineHtml = userEvents.length ? `<div class="timeline">${userEvents.map(e => `
+      <div class="timeline-item">
+        <div class="tl-title">${e.type.replace(/_/g, ' ')}${e.platform ? ' · ' + e.platform : ''}${e.adLocation ? ' · ' + e.adLocation : ''}</div>
+        <div class="tl-time">${new Date(e.timestamp).toLocaleString()}</div>
+      </div>`).join('')}</div>` : emptyInline('No timeline events for this user yet.');
+    $('#drawerBody').innerHTML = `
+      <div class="drawer-section">
+        <h4>Overview</h4>
+        <div class="drawer-meta">
+          <div class="drawer-meta-item"><div class="label">Fingerprint</div><div class="value mono" title="${fpId}">${fpId.substring(0, 20)}…</div></div>
+          <div class="drawer-meta-item"><div class="label">Country</div><div class="value">${user.country || '—'}</div></div>
+          <div class="drawer-meta-item"><div class="label">City / Timezone</div><div class="value">${user.timezone || '—'}</div></div>
+          <div class="drawer-meta-item"><div class="label">Device</div><div class="value">${user.deviceType || '—'}</div></div>
+          <div class="drawer-meta-item"><div class="label">OS</div><div class="value">${user.os || '—'}</div></div>
+          <div class="drawer-meta-item"><div class="label">Browser</div><div class="value">${user.browser || '—'}</div></div>
+          <div class="drawer-meta-item"><div class="label">Language</div><div class="value">${user.language || '—'}</div></div>
+          <div class="drawer-meta-item"><div class="label">Screen</div><div class="value">${user.screen || '—'}</div></div>
+          <div class="drawer-meta-item"><div class="label">First Visit</div><div class="value">${new Date(user.firstSeen).toLocaleString()}</div></div>
+          <div class="drawer-meta-item"><div class="label">Last Visit</div><div class="value">${new Date(user.lastSeen).toLocaleString()}</div></div>
+          <div class="drawer-meta-item"><div class="label">Visit Count</div><div class="value">${user.visitCount}</div></div>
+          <div class="drawer-meta-item"><div class="label">Downloads</div><div class="value">${user.downloads}</div></div>
+          <div class="drawer-meta-item"><div class="label">Ads Viewed</div><div class="value">${user.adsViewed}</div></div>
+          <div class="drawer-meta-item"><div class="label">Sessions</div><div class="value">${user.sessions}</div></div>
+          <div class="drawer-meta-item"><div class="label">Links Pasted</div><div class="value">${user.links}</div></div>
+          <div class="drawer-meta-item"><div class="label">Blocked Status</div><div class="value">${blocked ? '<span class="badge badge-danger">Blocked</span>' : '<span class="badge badge-success">Active</span>'}</div></div>
+        </div>
+      </div>
+      <div class="drawer-section">
+        <h4>Timeline</h4>
+        ${timelineHtml}
+      </div>
+      <div class="drawer-section">
+        <button class="${blocked ? 'btn-ghost' : 'btn-danger'}" id="drawerBlockBtn" style="width:100%;justify-content:center;">
+          ${blocked ? 'Unblock User' : 'Block User'}
+        </button>
+      </div>`;
+    $('#drawerBlockBtn').addEventListener('click', () => {
+      if (blocked) { unblockUser(fpId); toast.success('User unblocked'); }
+      else { blockUser(fpId, { deviceType: user.deviceType, os: user.os, browser: user.browser }); toast.success('User blocked'); }
+      closeDrawer();
+      renderUsers();
+    });
+    $('#drawerBackdrop').classList.add('open');
+    $('#userDrawer').classList.add('open');
+  }
+  function closeDrawer() {
+    $('#drawerBackdrop').classList.remove('open');
+    $('#userDrawer').classList.remove('open');
+  }
+  $('#drawerClose').addEventListener('click', closeDrawer);
+  $('#drawerBackdrop').addEventListener('click', closeDrawer);
+
+  // DOWNLOADS
+  function renderDownloads() {
+    const a = getAggregates();
+    const mostDownloadedPlatform = Object.entries(a.dlPlatforms).sort((x, y) => y[1] - x[1])[0];
+    const mostDownloadedCreator = Object.entries(a.creators).sort((x, y) => y[1] - x[1])[0];
+    const avgDlTime = a.avgProcessingTime ? Math.round(a.avgProcessingTime / 100) / 10 + 's' : '—';
+    $('#downloadsStats').innerHTML = [
+      statCard('Total Downloads', a.downloads.length, { icon: 'i-download' }),
+      statCard('Successful', a.successDownloads, { icon: 'i-check', variant: 'success' }),
+      statCard('Failed', a.failedDownloads, { icon: 'i-alert', variant: a.failedDownloads > 0 ? 'danger' : '' }),
+      statCard('Avg Processing Time', avgDlTime, { icon: 'i-clock' }),
+      statCard('Avg Download Time', avgDlTime, { icon: 'i-clock' }),
+      statCard('Most Platform', mostDownloadedPlatform ? mostDownloadedPlatform[0] : '—', { icon: 'i-bolt' }),
+      statCard('Most Creator', mostDownloadedCreator ? mostDownloadedCreator[0] : '—', { icon: 'i-user' }),
+      statCard('Downloads Today', a.downloadsToday, { icon: 'i-download' })
+    ].join('');
+    $$('#downloadsStats .stat-value[data-target]').forEach(el => { const t = parseFloat(el.dataset.target); if (!isNaN(t)) countUp(el, t); });
+    renderLineChart($('#downloadsPerDayChart'), a.downloadsPerDay);
+    renderLineChart($('#downloadsPerHourChart'), a.downloadsPerHour);
+    renderBars($('#topPlatformsBar'), Object.entries(a.dlPlatforms).map(([k, v]) => ({ label: k, value: v })));
+    renderBars($('#topDevicesBar'), Object.entries(a.dlDevices).map(([k, v]) => ({ label: k, value: v })));
+    renderBars($('#topDownloadCountriesBar'), Object.entries(a.dlCountries).map(([k, v]) => ({ label: k, value: v })));
+    const body = $('#downloadsTableBody');
+    if (!a.downloads.length) {
+      body.innerHTML = `<tr class="empty-row"><td colspan="8">${emptyState('No downloads yet', 'When users start downloading videos, they will appear here.', 'i-download')}</td></tr>`;
+    } else {
+      body.innerHTML = a.downloads.slice(-50).reverse().map((e, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td class="time-cell">${new Date(e.timestamp).toLocaleString()}</td>
+          <td><span class="badge badge-platform">${e.platform || '?'}</span></td>
+          <td class="url-cell" title="${(e.url || '').replace(/"/g, '&quot;')}">${e.url || ''}</td>
+          <td><span class="badge badge-device">${e.deviceType || '—'}</span></td>
+          <td>${e.os || '—'}</td>
+          <td>${e.country || '—'}</td>
+          <td><span class="badge badge-success">${e.success !== false ? 'Success' : 'Failed'}</span></td>
+        </tr>`).join('');
+    }
+  }
+
+  // SESSIONS
+  function renderSessions() {
+    const a = getAggregates();
+    const sessionTimes = a.sessionEnds.map(e => e.timeSpentSeconds || 0).filter(t => t > 0);
+    const longestSession = sessionTimes.length ? Math.max(...sessionTimes) : 0;
+    const shortestSession = sessionTimes.length ? Math.min(...sessionTimes) : 0;
+    $('#sessionStats').innerHTML = [
+      statCard('Total Sessions', a.sessions.length, { icon: 'i-clock' }),
+      statCard('Avg Session', formatTime(Math.round(a.avgSessionTime)), { icon: 'i-clock' }),
+      statCard('Longest Session', formatTime(longestSession), { icon: 'i-clock', variant: 'success' }),
+      statCard('Shortest Session', formatTime(shortestSession), { icon: 'i-clock' }),
+      statCard('Avg Active Time', formatTime(Math.round(a.avgActiveTime)), { icon: 'i-bolt' }),
+      statCard('Sessions Today', a.sessionsToday, { icon: 'i-clock' })
+    ].join('');
+    $$('#sessionStats .stat-value[data-target]').forEach(el => { const t = parseFloat(el.dataset.target); if (!isNaN(t)) countUp(el, t); });
+    renderLineChart($('#sessionTimelineChart'), a.sessionsPerDay);
+    // Heatmap
+    const hm = $('#sessionHeatmap');
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let hmHtml = `<div class="heatmap"><div class="hm-label"></div>`;
+    for (let h = 0; h < 24; h++) hmHtml += `<div class="hm-label" style="text-align:center;">${h}</div>`;
+    for (let d = 0; d < 7; d++) {
+      hmHtml += `<div class="hm-label">${days[d]}</div>`;
+      for (let h = 0; h < 24; h++) {
+        const v = a.heatmap[d][h];
+        const heat = v === 0 ? 0 : Math.min(4, Math.ceil(v / Math.max(a.heatmapMax / 4, 1)));
+        const cls = v === 0 ? '' : 'heat-' + heat + ' has-data';
+        hmHtml += `<div class="hm-cell ${cls}" title="${days[d]} ${h}:00 — ${v} sessions"></div>`;
+      }
+    }
+    hmHtml += `</div><div class="hm-legend"><span>Less</span><div class="hm-swatches"><div class="hm-sw" style="background:rgba(255,255,255,.04);"></div><div class="hm-sw" style="background:rgba(187,234,2,.15);"></div><div class="hm-sw" style="background:rgba(187,234,2,.3);"></div><div class="hm-sw" style="background:rgba(187,234,2,.5);"></div><div class="hm-sw" style="background:rgba(187,234,2,.75);"></div></div><span>More</span></div>`;
+    hm.innerHTML = hmHtml;
+    // Table
+    const all = [...a.sessions, ...a.sessionEnds].sort((x, y) => new Date(y.timestamp) - new Date(x.timestamp));
+    $('#sessionsCount').textContent = `${all.length} session${all.length === 1 ? '' : 's'}`;
+    const body = $('#sessionsTableBody');
+    if (!all.length) {
+      body.innerHTML = `<tr class="empty-row"><td colspan="9">${emptyState('No sessions yet', 'When users visit the site, their sessions will be tracked here.', 'i-clock')}</td></tr>`;
+    } else {
+      body.innerHTML = all.slice(0, 100).map((e, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td class="time-cell">${new Date(e.timestamp).toLocaleString()}</td>
+          <td><span class="badge badge-type">${e.type}</span></td>
+          <td>${e.timeSpentSeconds ? formatTime(e.timeSpentSeconds) : '—'}</td>
+          <td>${e.activeTimeSeconds ? formatTime(e.activeTimeSeconds) : '—'}</td>
+          <td>${e.adImpressions || '—'}</td>
+          <td><span class="badge badge-device">${e.deviceType || '—'}</span></td>
+          <td>${e.os || '—'}</td>
+          <td>${e.country || '—'}</td>
+        </tr>`).join('');
+    }
+  }
+
+  // ANALYTICS
+  function renderAnalytics() {
+    const a = getAggregates();
+    $('#analyticsStats').innerHTML = [
+      statCard('Conversion Rate', a.conversionRate.toFixed(1) + '%', { icon: 'i-target' }),
+      statCard('Success Rate', a.successRate.toFixed(1) + '%', { icon: 'i-check', variant: 'success' }),
+      statCard('Avg Processing', a.avgProcessingTime ? Math.round(a.avgProcessingTime / 100) / 10 + 's' : '—', { icon: 'i-clock' }),
+      statCard('Avg Session', formatTime(Math.round(a.avgSessionTime)), { icon: 'i-clock' }),
+      statCard('Avg Ads/User', a.uniqueUsers.length ? (a.totalAds / a.uniqueUsers.length).toFixed(1) : '0', { icon: 'i-eye' }),
+      statCard('Returning Rate', a.uniqueUsers.length ? (a.returningUsers / a.uniqueUsers.length * 100).toFixed(1) + '%' : '0%', { icon: 'i-users' }),
+      statCard('User Growth', '+' + a.newUsers, { icon: 'i-trending-up', variant: 'success' }),
+      statCard('Revenue Growth', '+$' + a.revenueToday.toFixed(2), { icon: 'i-dollar', variant: 'success' }),
+      statCard('DAU', a.dau, { icon: 'i-bolt' }),
+      statCard('MAU', a.mau, { icon: 'i-users' }),
+      statCard('Retention', a.uniqueUsers.length ? (a.returningUsers / a.uniqueUsers.length * 100).toFixed(0) + '%' : '0%', { icon: 'i-users' }),
+      statCard('Bounce Rate', a.bounceRate.toFixed(1) + '%', { icon: 'i-trending-down' })
+    ].join('');
+    $$('#analyticsStats .stat-value[data-target]').forEach(el => { const t = parseFloat(el.dataset.target); if (!isNaN(t)) countUp(el, t); });
+    renderLineChart($('#dauChart'), a.dauSeries);
+    // MAU series (last 6 months rough)
+    const mauSeries = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 30 * 86400 * 1000);
+      const set = new Set();
+      a.uniqueUsers.forEach(u => {
+        const ud = new Date(u.firstSeen);
+        if (ud <= d) set.add(u.fpId);
+      });
+      mauSeries.push({ label: d.toLocaleDateString([], { month: 'short' }), value: set.size });
+    }
+    renderLineChart($('#mauChart'), mauSeries);
+    // Retention (simple bars)
+    const retentionData = [
+      { label: 'Day 1', value: a.uniqueUsers.length },
+      { label: 'Day 7', value: a.returningUsers },
+      { label: 'Day 30', value: a.mau }
+    ];
+    renderBars($('#retentionChart'), retentionData);
+    renderLineChart($('#userGrowthChart'), a.dauSeries);
+    renderLineChart($('#revenueGrowthChart'), a.downloadsPerDay.map(d => ({ label: d.label, value: d.value * 0.025 })));
+  }
+
+  // REVENUE
+  function renderRevenue() {
+    const a = getAggregates();
+    $('#revenueStats').innerHTML = [
+      statCard('Estimated Revenue', '$' + a.totalRevenue.toFixed(2), { icon: 'i-dollar', variant: 'success' }),
+      statCard('Today', '$' + a.revenueToday.toFixed(2), { icon: 'i-dollar', variant: 'success' }),
+      statCard('Yesterday', '$' + a.revenueYesterday.toFixed(2), { icon: 'i-dollar' }),
+      statCard('This Week', '$' + a.revenueWeek.toFixed(2), { icon: 'i-dollar' }),
+      statCard('This Month', '$' + a.revenueMonth.toFixed(2), { icon: 'i-dollar' }),
+      statCard('Lifetime', '$' + a.totalRevenue.toFixed(2), { icon: 'i-dollar', variant: 'success' }),
+      statCard('RPM', '$' + a.rpm.toFixed(2), { icon: 'i-dollar' }),
+      statCard('CPM', '$' + a.cpm.toFixed(2), { icon: 'i-dollar' }),
+      statCard('CTR', a.actualCtr.toFixed(2) + '%', { icon: 'i-target' }),
+      statCard('Fill Rate', a.fillRate.toFixed(1) + '%', { icon: 'i-bolt' }),
+      statCard('Ad Requests', a.totalAds, { icon: 'i-eye' }),
+      statCard('Impressions', a.totalAds, { icon: 'i-eye' }),
+      statCard('Clicks', a.clicks, { icon: 'i-target' }),
+      statCard('Earnings', '$' + a.totalRevenue.toFixed(2), { icon: 'i-dollar', variant: 'success' })
+    ].join('');
+    $$('#revenueStats .stat-value[data-target]').forEach(el => { const t = parseFloat(el.dataset.target); if (!isNaN(t)) countUp(el, t); });
+    const revenueSeries = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 86400 * 1000);
+      const key = dayKey(d);
+      const count = a.ads.filter(e => dayKey(new Date(e.timestamp)) === key).length;
+      revenueSeries.push({ label: d.toLocaleDateString([], { month: 'short', day: 'numeric' }), value: count * 0.025 });
+    }
+    renderLineChart($('#revenueChart'), revenueSeries);
+    const rpmCpmData = [
+      { label: 'RPM', value: a.rpm },
+      { label: 'CPM', value: parseFloat(a.cpm) }
+    ];
+    renderBars($('#rpmCpmChart'), rpmCpmData);
+    const ctrData = [
+      { label: 'CTR %', value: a.actualCtr },
+      { label: 'Fill %', value: a.fillRate }
+    ];
+    renderBars($('#ctrChart'), ctrData);
+    const topAds = Object.entries(a.placements).sort((x, y) => y[1].impressions - x[1].impressions).slice(0, 6).map(([k, v]) => ({ label: k, value: v.impressions }));
+    renderBars($('#topAdsBar'), topAds);
+    const body = $('#revenueBreakdownBody');
+    if (!Object.keys(a.placements).length) {
+      body.innerHTML = `<tr class="empty-row"><td colspan="6">${emptyInline('No revenue data yet')}</td></tr>`;
+    } else {
+      body.innerHTML = Object.entries(a.placements).map(([k, v]) => {
+        const ctr = v.impressions ? (v.clicks / v.impressions * 100).toFixed(2) : '0';
+        const rpm = v.impressions ? (v.revenue / v.impressions * 1000).toFixed(2) : '0';
+        return `<tr>
+          <td><span class="badge badge-platform">${k}</span></td>
+          <td>${v.impressions}</td>
+          <td>${v.clicks}</td>
+          <td>${ctr}%</td>
+          <td>$${v.revenue.toFixed(2)}</td>
+          <td>$${rpm}</td>
+        </tr>`;
+      }).join('');
+    }
+  }
+
+  // ADS
+  function renderAds() {
+    const a = getAggregates();
+    const uniqueAds = new Set(a.ads.map(ad => ad.adLocation)).size;
+    $('#adStats').innerHTML = [
+      statCard('Total Impressions', a.totalAds, { icon: 'i-eye' }),
+      statCard('Unique Impressions', uniqueAds, { icon: 'i-target' }),
+      statCard('CTR', a.actualCtr.toFixed(2) + '%', { icon: 'i-target' }),
+      statCard('Ad Requests', a.totalAds, { icon: 'i-eye' }),
+      statCard('Fill Rate', a.fillRate.toFixed(1) + '%', { icon: 'i-bolt' }),
+      statCard('Revenue', '$' + a.totalRevenue.toFixed(2), { icon: 'i-dollar', variant: 'success' })
+    ].join('');
+    $$('#adStats .stat-value[data-target]').forEach(el => { const t = parseFloat(el.dataset.target); if (!isNaN(t)) countUp(el, t); });
+    const adTrend = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 86400 * 1000);
+      const key = dayKey(d);
+      const count = a.ads.filter(e => dayKey(new Date(e.timestamp)) === key).length;
+      adTrend.push({ label: d.toLocaleDateString([], { month: 'short', day: 'numeric' }), value: count });
+    }
+    renderLineChart($('#adTrendChart'), adTrend);
+    renderBars($('#adPlacementsBar'), Object.entries(a.placements).map(([k, v]) => ({ label: k, value: v.impressions })));
+    $('#adsCount').textContent = `${a.ads.length} impression${a.ads.length === 1 ? '' : 's'}`;
+    const body = $('#adsTableBody');
+    if (!a.ads.length) {
+      body.innerHTML = `<tr class="empty-row"><td colspan="7">${emptyState('No ad impressions yet', 'Ad impressions will be tracked when users visit the public site.', 'i-eye')}</td></tr>`;
+    } else {
+      body.innerHTML = a.ads.slice(-50).reverse().map((e, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td class="time-cell">${new Date(e.timestamp).toLocaleString()}</td>
+          <td><span class="badge badge-platform">${e.adLocation || '?'}</span></td>
+          <td><span class="badge badge-device">${e.deviceType || '—'}</span></td>
+          <td>${e.os || '—'}</td>
+          <td>${e.browser || '—'}</td>
+          <td>${e.country || '—'}</td>
+        </tr>`).join('');
+    }
+  }
+
+  // COUNTRIES
+  function renderCountries() {
+    const a = getAggregates();
+    $('#countryStats').innerHTML = [
+      statCard('Total Countries', Object.keys(a.countries).length, { icon: 'i-globe' }),
+      statCard('Total Cities', Object.keys(a.cities).length, { icon: 'i-globe' }),
+      statCard('Top Country', Object.entries(a.countries).sort((x, y) => y[1] - x[1])[0]?.[0] || '—', { icon: 'i-flag' }),
+      statCard('Top City', Object.entries(a.cities).sort((x, y) => y[1] - x[1])[0]?.[0] || '—', { icon: 'i-flag' })
+    ].join('');
+    $$('#countryStats .stat-value[data-target]').forEach(el => { const t = parseFloat(el.dataset.target); if (!isNaN(t)) countUp(el, t); });
+    // World map (simplified — 6×4 grid of regions)
+    const regionMap = ['NA','US','CA','MX','BR','AR','GB','FR','DE','ES','IT','NL','RU','TR','EG','ZA','AE','IN','CN','JP','KR','SG','AU','NZ'];
+    const countryCounts = a.countries;
+    const maxC = Math.max(...Object.values(countryCounts), 1);
+    const worldHtml = regionMap.map(code => {
+      const v = countryCounts[code] || 0;
+      const heat = v === 0 ? 0 : Math.min(4, Math.ceil(v / Math.max(maxC / 4, 1)));
+      const cls = v === 0 ? '' : 'heat-' + heat + ' has-data';
+      return `<div class="world-cell ${cls}" title="${code}: ${v} visitors">${code}</div>`;
+    }).join('');
+    $('#worldMap').innerHTML = `<div class="world-grid">${worldHtml}</div>`;
+    renderBars($('#topVisitorsCountriesBar'), Object.entries(a.countries).sort((x, y) => y[1] - x[1]).slice(0, 8).map(([k, v]) => ({ label: k, value: v })));
+    renderBars($('#topDlCountriesBar'), Object.entries(a.dlCountries).sort((x, y) => y[1] - x[1]).slice(0, 8).map(([k, v]) => ({ label: k, value: v })));
+    renderBars($('#topCitiesBar'), Object.entries(a.cities).sort((x, y) => y[1] - x[1]).slice(0, 8).map(([k, v]) => ({ label: k.replace(/_/g, ' '), value: v })));
+    // Revenue by country (rough estimate — proportional to sessions)
+    const revByCountry = Object.entries(a.countries).map(([k, v]) => ({ label: k, value: v * 0.025 }));
+    renderBars($('#revenueByCountryBar'), revByCountry.sort((x, y) => y.value - x.value).slice(0, 8));
+  }
+
+  // ERRORS
+  function renderErrors() {
+    const a = getAggregates();
+    $('#errorStats').innerHTML = [
+      statCard('Total Errors', a.errors.length, { icon: 'i-alert', variant: a.errors.length > 0 ? 'danger' : '' }),
+      statCard('Errors Today', a.errorsToday, { icon: 'i-alert', variant: a.errorsToday > 0 ? 'danger' : '' }),
+      statCard('API Errors', a.errorTypes.API_FAIL || 0, { icon: 'i-server', variant: 'danger' }),
+      statCard('Download Failures', a.errorTypes.DOWNLOAD_FALLBACK || 0, { icon: 'i-download', variant: 'danger' }),
+      statCard('Timeouts', a.errorTypes.TIMEOUT || 0, { icon: 'i-clock', variant: 'warn' }),
+      statCard('Invalid URLs', a.errorTypes.INVALID_URL || 0, { icon: 'i-alert' }),
+      statCard('Rate Limits', a.errorTypes.RATE_LIMITED || 0, { icon: 'i-bolt', variant: 'warn' }),
+      statCard('HTTP Errors', Object.keys(a.errorTypes).filter(k => k.startsWith('HTTP_')).reduce((s, k) => s + a.errorTypes[k], 0), { icon: 'i-server' })
+    ].join('');
+    $$('#errorStats .stat-value[data-target]').forEach(el => { const t = parseFloat(el.dataset.target); if (!isNaN(t)) countUp(el, t); });
+    renderLineChart($('#errorsPerDayChart'), a.errorsPerDay);
+    renderDonut($('#errorTypeDonut'), Object.entries(a.errorTypes).map(([k, v]) => ({ label: k, value: v })));
+    const filter = $('#errorTypeFilter').value;
+    let filtered = a.errors.slice().reverse();
+    if (filter) filtered = filtered.filter(e => e.errorType === filter);
+    const body = $('#errorsTableBody');
+    if (!filtered.length) {
+      body.innerHTML = `<tr class="empty-row"><td colspan="7">${emptyState('No errors recorded', 'All systems are operating normally.', 'i-check')}</td></tr>`;
+    } else {
+      body.innerHTML = filtered.slice(0, 50).map((e, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td class="time-cell">${new Date(e.timestamp).toLocaleString()}</td>
+          <td><span class="badge badge-danger">${e.errorType || 'UNKNOWN'}</span></td>
+          <td class="url-cell" title="${(e.details || '').replace(/"/g, '&quot;')}">${e.details || '—'}</td>
+          <td><span class="badge badge-device">${e.deviceType || '—'}</span></td>
+          <td>${e.os || '—'}</td>
+          <td>${e.country || '—'}</td>
+        </tr>`).join('');
+    }
+  }
+
+  // SETTINGS
+  function renderSettings() {
+    const s = getSettings();
+    $$('.toggle[data-setting]').forEach(t => {
+      const key = t.dataset.setting;
+      if (s[key] === false) t.classList.remove('on');
+      else if (s[key] === true) t.classList.add('on');
+      // Default state from class
+      t.onclick = () => {
+        t.classList.toggle('on');
+        const newSettings = getSettings();
+        newSettings[key] = t.classList.contains('on');
+        saveSettings(newSettings);
+        logAction('admin', 'Setting toggled', `${key}: ${newSettings[key]}`);
+        toast.success(`${key} ${newSettings[key] ? 'enabled' : 'disabled'}`);
+      };
+    });
+    const cpm = $('#cpmInput'); if (cpm && s.cpm) cpm.value = s.cpm;
+    const ctr = $('#ctrInput'); if (ctr && s.ctr) ctr.value = s.ctr;
+    const se = $('#sessionExpSelect'); if (se && s.sessionExp) se.value = s.sessionExp;
+  }
+
+  // LOGS
+  function renderLogs() {
+    const logs = getLogs().slice().reverse();
+    const filter = $('#logTypeFilter').value;
+    const filtered = filter ? logs.filter(l => l.type === filter) : logs;
+    const body = $('#logsTableBody');
+    if (!filtered.length) {
+      body.innerHTML = `<tr class="empty-row"><td colspan="5">${emptyState('No logs yet', 'Admin actions and security events will appear here.', 'i-clipboard')}</td></tr>`;
+    } else {
+      const typeBadge = { activity: 'badge-type', admin: 'badge-platform', login: 'badge-success', security: 'badge-danger' };
+      body.innerHTML = filtered.slice(0, 200).map((l, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td class="time-cell">${new Date(l.timestamp).toLocaleString()}</td>
+          <td><span class="badge ${typeBadge[l.type] || 'badge-device'}">${l.type}</span></td>
+          <td>${l.action}</td>
+          <td class="url-cell" title="${(l.details || '').replace(/"/g, '&quot;')}">${l.details || '—'}</td>
+        </tr>`).join('');
+    }
+  }
+
+  // BACKUPS
+  function renderBackups() {
+    const backups = getBackups();
+    const lastBk = backups[0];
+    $('#lastBackupTime').textContent = lastBk ? new Date(lastBk.created).toLocaleString() : 'Never';
+    const body = $('#backupsTableBody');
+    if (!backups.length) {
+      body.innerHTML = `<tr class="empty-row"><td colspan="5">${emptyState('No backups yet', 'Create your first backup to safeguard your analytics data.', 'i-database')}</td></tr>`;
+    } else {
+      body.innerHTML = backups.map((b, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td class="mono">${b.id}</td>
+          <td class="time-cell">${new Date(b.created).toLocaleString()}</td>
+          <td>${b.eventCount || 0}</td>
+          <td>${formatBytes(b.size || 0)}</td>
+          <td>
+            <div style="display:flex;gap:.25rem;">
+              <button class="btn-ghost" data-download-bk="${b.id}" style="padding:.3rem .55rem;font-size:.72rem;">Download</button>
+              <button class="btn-danger" data-delete-bk="${b.id}" style="padding:.3rem .55rem;font-size:.72rem;">Delete</button>
+            </div>
+          </td>
+        </tr>`).join('');
+    }
+    $$('[data-download-bk]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const bk = backups.find(b => b.id === btn.dataset.downloadBk);
+        if (!bk) return;
+        const blob = new Blob([JSON.stringify(bk.data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `piontok-backup-${bk.id}.json`; a.click();
+        URL.revokeObjectURL(url);
+        toast.success('Backup downloaded');
+      });
+    });
+    $$('[data-delete-bk]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Delete this backup?')) return;
+        const id = btn.dataset.deleteBk;
+        saveBackups(getBackups().filter(b => b.id !== id));
+        renderBackups();
+        toast.success('Backup deleted');
+      });
+    });
+  }
+
+  /* =====================================================================
+     9. Render all (called on refresh / login)
+     ===================================================================== */
+  function renderAll() {
+    renderPage(currentPage);
+    renderNotifBadge();
+  }
+
+  /* =====================================================================
+     10. Event listeners (filters, exports, etc.)
+     ===================================================================== */
+  $('#userSearch').addEventListener('input', () => { userPageState.page = 1; renderUsers(); });
+  $('#userStatusFilter').addEventListener('change', () => { userPageState.page = 1; renderUsers(); });
+  $('#userDeviceFilter').addEventListener('change', () => { userPageState.page = 1; renderUsers(); });
+  $$('#usersTable th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.sort;
+      if (userSortState.col === col) userSortState.dir = userSortState.dir === 'asc' ? 'desc' : 'asc';
+      else { userSortState.col = col; userSortState.dir = 'asc'; }
+      renderUsers();
+    });
+  });
+  $('#errorTypeFilter').addEventListener('change', renderErrors);
+  $('#logTypeFilter').addEventListener('change', renderLogs);
+
+  // Export JSON (top-level)
+  $('#exportBtn').addEventListener('click', () => {
+    const data = getAllData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `piontok-analytics-${dayKey(new Date())}.json`; a.click();
+    URL.revokeObjectURL(url);
+    logAction('admin', 'Data exported', `JSON export, ${data.length} events`);
+    toast.success('Analytics exported as JSON');
+  });
+
+  // Export users
+  $('#exportUsersBtn').addEventListener('click', () => {
+    const a = getAggregates();
+    const blob = new Blob([JSON.stringify(a.uniqueUsers, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url; link.download = `piontok-users-${dayKey(new Date())}.json`; link.click();
+    URL.revokeObjectURL(url);
+    toast.success('Users exported');
+  });
+  $('#exportDownloadsBtn').addEventListener('click', () => {
+    const a = getAggregates();
+    const blob = new Blob([JSON.stringify(a.downloads, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url; link.download = `piontok-downloads-${dayKey(new Date())}.json`; link.click();
+    URL.revokeObjectURL(url);
+    toast.success('Downloads exported');
+  });
+  $('#exportErrorsBtn').addEventListener('click', () => {
+    const a = getAggregates();
+    const blob = new Blob([JSON.stringify(a.errors, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url; link.download = `piontok-errors-${dayKey(new Date())}.json`; link.click();
+    URL.revokeObjectURL(url);
+    toast.success('Errors exported');
+  });
+  $('#exportLogsBtn').addEventListener('click', () => {
+    const logs = getLogs();
+    const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url; link.download = `piontok-logs-${dayKey(new Date())}.json`; link.click();
+    URL.revokeObjectURL(url);
+    toast.success('Logs exported');
+  });
+
+  // Clear all
+  $('#clearBtn').addEventListener('click', () => {
+    if (confirm('Delete ALL analytics data? This cannot be undone.')) {
+      clearAllData();
+      logAction('admin', 'All data cleared', 'Every analytics event was deleted');
+      toast.success('All analytics data cleared');
+      renderAll();
+    }
+  });
+
+  // Logout
+  $('#logoutBtn').addEventListener('click', () => {
+    logAction('login', 'Admin signed out', '');
+    logout();
+    showLogin();
+  });
+
+  // Global search (basic — just routes to relevant page)
+  $('#globalSearch').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    if (!q) return;
+    // If query looks like a fingerprint hash, route to users
+    if (/^[a-f0-9]{6,}/i.test(q)) {
+      $('#userSearch').value = q;
+      navigateTo('users');
+    } else if (/tiktok|instagram|youtube/.test(q)) {
+      navigateTo('downloads');
+    } else if (/error|fail|timeout/.test(q)) {
+      navigateTo('errors');
+    }
+  });
+
+  // Settings save
+  $('#saveSettingsBtn').addEventListener('click', () => {
+    const s = getSettings();
+    s.cpm = $('#cpmInput').value;
+    s.ctr = $('#ctrInput').value;
+    s.sessionExp = $('#sessionExpSelect').value;
+    saveSettings(s);
+    logAction('admin', 'Settings saved', 'CPM/CTR/session settings updated');
+    toast.success('Settings saved');
+    renderAll();
+  });
+
+  $('#changePassBtn').addEventListener('click', () => {
+    toast.info('Password change is disabled in demo mode. Configure via environment variable in production.');
+  });
+
+  $('#logoutAllBtn').addEventListener('click', () => {
+    if (confirm('Revoke all admin sessions? You will be logged out.')) {
+      logout();
+      logAction('security', 'All sessions revoked', '');
+      showLogin();
+      toast.success('All sessions revoked');
+    }
+  });
+
+  // Backups
+  $('#backupJsonBtn').addEventListener('click', () => {
+    $('#exportBtn').click();
+  });
+  $('#backupCsvBtn').addEventListener('click', () => {
+    const data = getAllData();
+    if (!data.length) { toast.warn('No data to export'); return; }
+    const headers = ['timestamp', 'type', 'fpId', 'platform', 'url', 'deviceType', 'os', 'browser', 'country'];
+    const rows = data.map(e => headers.map(h => `"${(e[h] || '').toString().replace(/"/g, '""')}"`).join(','));
+    const csv = headers.join(',') + '\n' + rows.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `piontok-analytics-${dayKey(new Date())}.csv`; a.click();
+    URL.revokeObjectURL(url);
+    toast.success('CSV exported');
+  });
+  $('#backupExcelBtn').addEventListener('click', () => {
+    const data = getAllData();
+    if (!data.length) { toast.warn('No data to export'); return; }
+    const headers = ['Timestamp', 'Type', 'Fingerprint', 'Platform', 'URL', 'Device', 'OS', 'Browser', 'Country'];
+    const rows = data.map(e => `<tr>${headers.map(h => `<td>${(e[h.toLowerCase()] || '').toString().replace(/</g, '&lt;')}</td>`).join('')}</tr>`).join('');
+    const html = `<table border="1">${headers.map(h => `<th>${h}</th>`).join('')}${rows}</table>`;
+    const full = `<html><head><meta charset="utf-8"></head><body>${html}</body></html>`;
+    const blob = new Blob([full], { type: 'application/vnd.ms-excel' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `piontok-analytics-${dayKey(new Date())}.xls`; a.click();
+    URL.revokeObjectURL(url);
+    toast.success('Excel file exported');
+  });
+  $('#restoreBtn').addEventListener('click', () => {
+    const file = $('#restoreFile').files[0];
+    if (!file) { toast.warn('Choose a backup file first'); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!Array.isArray(data)) throw new Error('Invalid backup format');
+        if (!confirm(`Restore ${data.length} events? This will replace current data.`)) return;
+        localStorage.setItem(ANALYTICS_KEY, JSON.stringify(data));
+        logAction('admin', 'Backup restored', `${data.length} events from ${file.name}`);
+        toast.success('Backup restored');
+        renderAll();
+      } catch (err) {
+        toast.error('Invalid backup file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  });
+  $('#createSnapshotBtn').addEventListener('click', () => {
+    const data = getAllData();
+    const id = Date.now().toString(36);
+    const snapshot = {
+      id,
+      created: new Date().toISOString(),
+      eventCount: data.length,
+      size: JSON.stringify(data).length,
+      data
+    };
+    const backups = getBackups();
+    backups.unshift(snapshot);
+    saveBackups(backups.slice(0, 20));
+    logAction('admin', 'Snapshot created', `ID: ${id}, ${data.length} events`);
+    toast.success('Snapshot created');
+    renderBackups();
+  });
+
+  /* =====================================================================
+     11. Init
+     ===================================================================== */
+  if (isLoggedIn()) showDashboard(); else showLogin();
+
+  // Expose for debugging
+  window.__piontokAdmin = { getAggregates, renderAll, toast, navigateTo };
+})();
+</script>
+</body>
+</html>

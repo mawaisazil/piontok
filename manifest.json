@@ -1,0 +1,51 @@
+{
+  "name": "SnapClip — Video Downloader",
+  "short_name": "SnapClip",
+  "description": "Fast, free, watermark-free video downloader for TikTok, Instagram and YouTube.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": ["utilities", "productivity", "entertainment"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%23000'/><path d='M176 144l192 112-192 112z' fill='%23bbea02'/></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23000'/><path d='M176 144l192 112-192 112z' fill='%23bbea02'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23000'/><rect x='24' y='24' width='144' height='144' rx='32' fill='none' stroke='%23bbea02' stroke-width='4'/><path d='M72 60l60 36-60 36z' fill='%23bbea02'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Home",
+      "url": "./index.html#home",
+      "icons": [{ "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23bbea02' d='M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3z'/></svg>", "sizes": "96x96", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "About",
+      "url": "./index.html#about",
+      "icons": [{ "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='9' fill='none' stroke='%23bbea02' stroke-width='2'/><path d='M12 16v-4M12 8h.01' stroke='%23bbea02' stroke-width='2' stroke-linecap='round'/></svg>", "sizes": "96x96", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Contact",
+      "url": "./index.html#contact",
+      "icons": [{ "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='3' y='5' width='18' height='14' rx='2' fill='none' stroke='%23bbea02' stroke-width='2'/><path d='m3 7 9 6 9-6' fill='none' stroke='%23bbea02' stroke-width='2'/></svg>", "sizes": "96x96", "type": "image/svg+xml" }]
+    }
+  ]
+}
