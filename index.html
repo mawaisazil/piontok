@@ -2766,19 +2766,12 @@
             </button>
           </div>
           <!-- Ad banner below result -->
-          <div class="ad-placeholder" role="complementary" aria-label="Advertisement" style="margin-top:1.5rem;">
-            <svg><use href="#i-info"/></svg>
-            <span>Advertisement</span>
-          </div>
-        </div>
+          <div class="ad-placeholder" id="ad-slot-result" role="complementary" aria-label="Advertisement" style="margin-top:1.5rem;"></div>
       </section>
 
       <!-- AD BANNER at the bottom of the hero -->
       <div class="container" id="adPlaceholder1" style="position: relative; z-index: 2; padding-bottom: 1.5rem;">
-        <div class="ad-placeholder" role="complementary" aria-label="Advertisement">
-          <svg><use href="#i-info"/></svg>
-          <span>Advertisement</span>
-        </div>
+          <div class="ad-placeholder" id="ad-slot-hero" role="complementary" aria-label="Advertisement"></div>
       </div>
     </section>
 
@@ -6943,6 +6936,108 @@
   });
 })();
 </script>
+<!-- ============================================================
+     Adsterra Banner Injector — 728×90 Leaderboard
+     Tumhara key: 479dc8b80420576df759b54490a95652
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
 
+  var ADSTERRA_KEY = '479dc8b80420576df759b54490a95652';
+  var ADSTERRA_CDN = 'https://closurenosy.com';
+  var AD_WIDTH     = 728;
+  var AD_HEIGHT    = 90;
+
+  function injectAdsterra(container) {
+    if (!container) return;
+
+    // Style container so iframe fits perfectly
+    container.style.maxWidth = AD_WIDTH + 'px';
+    container.style.width    = '100%';
+    container.style.height   = AD_HEIGHT + 'px';
+    container.style.padding  = '0';
+    container.style.display  = 'block';
+    container.style.margin   = '1rem auto';
+    container.style.overflow = 'hidden';
+    container.innerHTML      = '';
+
+    // ---- Responsive: 728×90 desktop, fallback 320×50 mobile ----
+    var isMobile = window.matchMedia('(max-width: 768px)').matches;
+    var w = isMobile ? 320 : AD_WIDTH;
+    var h = isMobile ? 50  : AD_HEIGHT;
+
+    var iframe = document.createElement('iframe');
+    iframe.width  = w;
+    iframe.height = h;
+    iframe.style.border   = 'none';
+    iframe.style.overflow = 'hidden';
+    iframe.style.display  = 'block';
+    iframe.style.maxWidth = '100%';
+    iframe.setAttribute('scrolling', 'no');
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('title', 'Advertisement');
+
+    // IMPORTANT: srcdoc use kiya hai — isse Adsterra ka document.write()
+    // page load ke BAAD bhi kaam karta hai (raw <script> se nahi karega).
+    iframe.srcdoc =
+      '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+      '<style>html,body{margin:0;padding:0;overflow:hidden;background:transparent;}</style>' +
+      '</head><body>' +
+      '<script type="text/javascript">' +
+        'atOptions = {"key":"' + ADSTERRA_KEY + '","format":"iframe",' +
+        '"height":' + h + ',"width":' + w + ',"params":{}};' +
+      '<\/script>' +
+      '<script type="text/javascript" src="' + ADSTERRA_CDN + '/' +
+        ADSTERRA_KEY + '/invoke.js"><\/script>' +
+      '</body></html>';
+
+    container.appendChild(iframe);
+  }
+
+  function initAds() {
+    // Slot 1 & 2 — page load pe turant inject
+    injectAdsterra(document.getElementById('ad-slot-hero'));
+    injectAdsterra(document.getElementById('ad-slot-trending'));
+
+    // Slot 3 — result card ke saath aata hai, isliye observe karo
+    var resultSlot    = document.getElementById('ad-slot-result');
+    var resultSection = document.getElementById('resultSection');
+    var resultContainer = document.getElementById('resultContainer');
+    if (!resultSlot || !resultSection) return;
+
+    function tryInjectResultAd() {
+      // Result visible nahi hai to skip
+      if (resultSection.style.display === 'none') return;
+      // Ad already injected to skip
+      if (resultSlot.querySelector('iframe')) return;
+      injectAdsterra(resultSlot);
+    }
+
+    // Watch karo jab result section show ho
+    new MutationObserver(tryInjectResultAd).observe(resultSection, {
+      attributes: true,
+      attributeFilter: ['style']
+    });
+
+    // Watch karo jab naya result render ho (2nd paste pe innerHTML change hota hai)
+    if (resultContainer) {
+      new MutationObserver(tryInjectResultAd).observe(resultContainer, {
+        childList: true,
+        subtree: false
+      });
+    }
+
+    // Initial check
+    tryInjectResultAd();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAds);
+  } else {
+    initAds();
+  }
+})();
+</script>
 </body>
 </html>
